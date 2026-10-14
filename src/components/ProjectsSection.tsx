@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PROJECTS, Project } from '@/data/portfolioData';
 import {
   ExternalLink,
@@ -21,6 +21,20 @@ export default function ProjectsSection() {
   const [filter, setFilter] = useState<'All' | 'Live' | 'Android' | 'Flutter'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedProject(null);
+    };
+    if (selectedProject) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedProject]);
 
   const filteredProjects = PROJECTS.filter((p) => {
     const matchesFilter =
@@ -240,8 +254,14 @@ export default function ProjectsSection() {
 
         {/* Modal for Details from CV */}
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl">
-            <div className="relative w-full max-w-2xl luxury-glass rounded-3xl p-5 sm:p-8 lg:p-10 border border-sky-400/30 shadow-2xl max-h-[88vh] overflow-y-auto">
+          <div
+            onClick={() => setSelectedProject(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-fade-in"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-2xl luxury-glass rounded-3xl p-5 sm:p-8 lg:p-10 border border-sky-400/30 shadow-2xl max-h-[88vh] overflow-y-auto"
+            >
               
               {/* Close Button */}
               <button

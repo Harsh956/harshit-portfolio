@@ -117,7 +117,7 @@ export default function Hero2D() {
                 className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-2xl font-bold bg-gradient-to-r from-sky-500 via-indigo-500 to-pink-500 text-white shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base text-center"
               >
                 <Smartphone className="w-5 h-5 text-white" />
-                <span>Explore 14 Play Store Apps</span>
+                <span>Explore 14 CV Projects</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
               </a>
 
@@ -177,7 +177,7 @@ export default function Hero2D() {
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <div className="text-xs font-bold text-white">14 Apps Live</div>
+                <div className="text-xs font-bold text-white">8 Apps Live</div>
                 <div className="text-[10px] text-emerald-300 font-mono">Google Play Verified</div>
               </div>
             </div>

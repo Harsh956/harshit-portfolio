@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Smartphone,
   Sprout,
@@ -30,6 +30,18 @@ export default function InteractivePhonePlayground() {
   const [timerSeconds, setTimerSeconds] = useState(1500);
   const [selectedSeat, setSelectedSeat] = useState<'A1' | 'A2' | 'B3' | 'VIP-1'>('VIP-1');
   const [cropScanned, setCropScanned] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (timerRunning && timerSeconds > 0) {
+      interval = setInterval(() => {
+        setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timerRunning, timerSeconds]);
 
   const triggerConfetti = () => {
     confetti({

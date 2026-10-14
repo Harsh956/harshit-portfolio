@@ -149,10 +149,10 @@ export default function PhoneMockup2D() {
             <div className="p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-indigo-950/30 to-purple-950/30 border border-indigo-500/30 flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <Layers className="w-3.5 h-3.5 text-sky-400" />
-                <span className="text-slate-200 font-semibold text-[11px]">14 Published Apps</span>
+                <span className="text-slate-200 font-semibold text-[11px]">8 Live Play Store Apps</span>
               </div>
               <span className="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/20">
-                ACTIVE
+                VERIFIED
               </span>
             </div>
 

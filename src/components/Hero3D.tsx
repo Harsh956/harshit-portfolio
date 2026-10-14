@@ -84,7 +84,7 @@ export default function Hero3D() {
                 className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold bg-white text-slate-950 hover:bg-slate-200 shadow-xl hover:shadow-2xl transition-all hover:scale-[1.02]"
               >
                 <Smartphone className="w-5 h-5 text-slate-900" />
-                <span>View 14 Play Store Apps</span>
+                <span>View 14 CV Projects</span>
                 <ArrowRight className="w-4 h-4 text-slate-700" />
               </a>
 
