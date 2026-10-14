@@ -42,35 +42,35 @@ export default function ProjectsSection() {
   });
 
   return (
-    <section id="projects" className="py-20 sm:py-28 lg:py-32 relative colored-grid overflow-hidden">
+    <section id="projects" className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
-          <div className="space-y-3 max-w-2xl text-left">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="space-y-2 max-w-2xl text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-sm">
               <FolderGit2 className="w-3.5 h-3.5 text-sky-400" />
               <span>Professional Projects from CV</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
               14 Professional <br className="hidden sm:block" />
               <span className="text-gradient-vibrant">Projects</span>
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
               All 14 projects directly from Harshit Saxena's CV. Live Play Store apps include authentic store screenshots and verified links. Completed projects without active store listings have external links cleanly omitted.
             </p>
           </div>
 
           {/* Quick Counter Badges */}
-          <div className="flex flex-wrap gap-2.5 shrink-0 self-start md:self-end">
-            <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl luxury-glass border border-emerald-500/30 bg-emerald-950/20">
+          <div className="flex flex-wrap gap-2 shrink-0 self-start md:self-end">
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl luxury-glass border border-emerald-500/30 bg-emerald-950/20">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <div className="text-left font-mono">
                 <div className="text-xs font-bold text-white">8 Live on Play Store</div>
-                <div className="text-[10px] text-emerald-400">With Screenshots</div>
+                <div className="text-[10px] text-emerald-400">With Real Screenshots</div>
               </div>
             </div>
-            <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl luxury-glass border border-white/10">
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl luxury-glass border border-white/10">
               <div className="text-left font-mono">
                 <div className="text-xs font-bold text-white">6 Production Projects</div>
                 <div className="text-[10px] text-slate-400">Enterprise / Client Delivery</div>
@@ -80,7 +80,7 @@ export default function ProjectsSection() {
         </div>
 
         {/* Filter Navigation & Search Bar */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-5">
           
           {/* Segmented Filter Pills */}
           <div className="flex items-center p-1.5 rounded-2xl luxury-glass border border-white/10 overflow-x-auto gap-1.5 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-1.5">
@@ -133,28 +133,28 @@ export default function ProjectsSection() {
 
               <div className="space-y-4 pt-1">
                 
-                {/* Real Google Play Screenshot Attached (Requirement 2) */}
+                {/* Real Google Play Screenshot Attached */}
                 {project.isLiveOnPlayStore && project.screenshotUrl ? (
-                  <div className="relative w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-slate-900 group-hover:border-sky-400/40 transition">
+                  <div className="relative w-full h-48 sm:h-52 rounded-2xl overflow-hidden border border-white/10 bg-[#070d1e] group-hover:border-sky-400/40 transition">
                     <img
                       src={project.screenshotUrl}
                       alt={`${project.title} Google Play Screenshot`}
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1120] via-transparent to-transparent opacity-80" />
-                    <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-black/80 border border-emerald-400/50 text-[10px] font-mono text-emerald-300 font-bold flex items-center gap-1 shadow-md">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1120] via-transparent to-black/20 opacity-80" />
+                    <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-sm border border-emerald-400/50 text-[10px] font-mono text-emerald-300 font-bold flex items-center gap-1 shadow-md">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Play Store Screenshot
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-24 rounded-2xl border border-white/5 bg-slate-900/50 p-4 flex flex-col justify-center">
-                    <span className="text-[11px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1.5">
+                  <div className="w-full h-20 rounded-2xl border border-white/5 bg-slate-900/40 p-3.5 flex flex-col justify-center">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
                       Production Project from CV
                     </span>
-                    <span className="text-xs text-slate-300 mt-1">
+                    <span className="text-xs text-slate-300 mt-0.5">
                       Client / Enterprise Delivered Application
                     </span>
                   </div>

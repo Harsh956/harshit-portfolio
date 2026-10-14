@@ -92,19 +92,19 @@ export default function InteractivePhonePlayground() {
   const currentAppMeta = appTabs.find((a) => a.id === selectedApp)!;
 
   return (
-    <section id="simulator" className="py-20 sm:py-28 lg:py-32 relative colored-grid overflow-hidden">
+    <section id="simulator" className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-md">
             <SlidersHorizontal className="w-3.5 h-3.5 text-sky-400" />
             <span>Interactive Device Simulation</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Live App <span className="text-gradient-vibrant">Simulator</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Test real architectural user flows, state management, and edge AI detection directly on the simulated device below.
           </p>
         </div>

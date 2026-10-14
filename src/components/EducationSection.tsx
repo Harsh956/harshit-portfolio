@@ -14,16 +14,16 @@ export default function EducationSection() {
   ];
 
   return (
-    <section className="py-24 lg:py-32 relative studio-grid">
+    <section className="py-10 sm:py-14 lg:py-16 relative studio-grid">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full luxury-glass border border-white/10 text-xs font-mono text-slate-300">
+        <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-white/10 text-xs font-mono text-slate-300">
             <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
             <span>Credentials & Engineering Foundations</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Education & <span className="text-shimmer">Certifications</span>
           </h2>
         </div>
@@ -98,7 +98,7 @@ export default function EducationSection() {
             </div>
 
             {/* Strengths */}
-            <div className="luxury-glass p-7 rounded-3xl border border-emerald-500/20 mt-8 space-y-3.5">
+            <div className="luxury-glass p-5 sm:p-6 rounded-3xl border border-emerald-500/20 mt-5 space-y-3">
               <h4 className="font-bold text-white text-sm flex items-center gap-2 text-emerald-400">
                 <Sparkles className="w-4 h-4" />
                 Engineering Philosophy & Core Strengths

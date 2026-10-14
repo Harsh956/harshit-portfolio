@@ -14,19 +14,19 @@ import {
 
 export default function ExperienceSection() {
   return (
-    <section id="experience" className="py-20 sm:py-28 lg:py-32 relative colored-grid overflow-hidden">
+    <section id="experience" className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-md">
             <Award className="w-3.5 h-3.5 text-sky-400" />
             <span>Track Record of Engineering Excellence</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Work <span className="text-gradient-vibrant">Experience</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Over 7 years of progressive engineering leadership architecting Android systems, 
             driving Play Store launches, and mentoring developer teams.
           </p>
@@ -38,7 +38,7 @@ export default function ExperienceSection() {
           {/* Vertical Track with Vibrant Gradient */}
           <div className="absolute left-3.5 sm:left-1/2 top-4 bottom-4 w-1 bg-gradient-to-b from-sky-400 via-indigo-500 to-pink-500 transform sm:-translate-x-1/2 rounded-full opacity-60 shadow-lg shadow-indigo-500/30" />
 
-          <div className="space-y-8 sm:space-y-12">
+          <div className="space-y-6 sm:space-y-8">
             {EXPERIENCES.map((exp, idx) => {
               const isEven = idx % 2 === 0;
               return (

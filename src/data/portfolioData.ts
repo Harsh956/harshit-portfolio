@@ -111,7 +111,7 @@ export const PROJECTS: Project[] = [
     teamSize: 6,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.orelogic.rapagraApp&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/Z2T9iKlmVsWm1Yv4UVDKb5E0ZjuMCAIM3_vySQxB2uf0ZTfiB1rthc1EOty-05IQkoljss3U-lYQTi_JVu90fg=s0-br30",
+    screenshotUrl: "/screenshots/rapagra.webp",
     description: "A smart agriculture and crop health monitoring application that helps farmers detect disease risks early and optimize pesticide usage. The system reduces crop protection costs, labor, and chemical spraying while improving productivity and yield management.",
     responsibilities: [
       "Developed using Kotlin and Android SDK",
@@ -130,7 +130,7 @@ export const PROJECTS: Project[] = [
     teamSize: 2,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.immortalSeats.android&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/0pS-Y8Suf03YUCLZJX0XYXAFF9WcSTmYOAuN4_HdGvKlwlr78wu9DSgy6mvmYnC7HmVaqYQa-sP4Ni_v6RBS=s0-br30",
+    screenshotUrl: "/screenshots/immortal-seats.webp",
     description: "A ticket booking application that allows users to search events using advanced filters and explore interactive seat maps with real-time seat views. Users can also save and manage their favorite events for quick access.",
     responsibilities: [
       "Interactive seat view maps and event search filters",
@@ -149,7 +149,7 @@ export const PROJECTS: Project[] = [
     teamSize: 4,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.ogrelogic.highdesertdesigns&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/_lI9yiL0QS9WzBfmlznLyiRCdQEXHrhUrNRIK3ds2hY9yDeH6Ak6Q_uJNJHVUSzpuLvhgFLRyEexfmBvHrqr=s0-br30",
+    screenshotUrl: "/screenshots/high-desert.webp",
     description: "A project management application designed for managing landscaping and design projects with real-time task tracking, team collaboration, and workload distribution. The app provides drag-and-drop project reassignment, secure data management, notifications, and detailed dashboards to improve productivity and project efficiency.",
     responsibilities: [
       "Real-time task tracking and drag-and-drop reassignment",
@@ -168,7 +168,7 @@ export const PROJECTS: Project[] = [
     teamSize: 4,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.ogrelogic.powerthinkingcorp&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/sorDWS61uPpgd5DyYPAIkV4WOsyTW01qbHG9ozz9xKld7aeJKyHqxfr9h9n7BIOGs4Rv4eDIx-tz_9wEyGdf=s0-br30",
+    screenshotUrl: "/screenshots/power-thinking.webp",
     description: "A mental health and well-being application designed to promote positive thinking, resilience, and emotional strength through evidence-based techniques. The app helps users manage stress, improve self-belief, and achieve personal goals with guided wellness tools.",
     responsibilities: [
       "Guided wellness tools, audio sessions, and goal tracking",
@@ -187,7 +187,7 @@ export const PROJECTS: Project[] = [
     teamSize: 4,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.ogrelogic.FederalBenifit&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/CC1mKmGluS0e3uHSN42cME1sm5zJc9VIb4tSjsW0syejyWBoRc-4NohdFK8UvYVD_2kw7hdCi1BPAg2zzYD0-w=s0-br30",
+    screenshotUrl: "/screenshots/federal-benefits.webp",
     description: "A federal employee benefits application designed to educate users about retirement plans, government benefit programs, and financial security. The platform helps federal employees understand and manage their benefits while avoiding common retirement-related issues.",
     responsibilities: [
       "Educational modules and benefit calculator integrations",
@@ -206,7 +206,7 @@ export const PROJECTS: Project[] = [
     teamSize: 4,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.goodwin.academy&hl=en",
-    screenshotUrl: "https://play-lh.googleusercontent.com/I0x-u_lub7sNG3abLvG07xz9j4CQtNtfb_L6wVumO3rKVVCZWxCX5tfQTIFmsibrPwde-llExM5ZRZNk2WaJWjM=s0-br30",
+    screenshotUrl: "/screenshots/goodwin-academy.webp",
     description: "A childcare and early learning application designed to support safe, engaging, and high-quality child care services with seamless parent communication. The platform promotes holistic child development through a secure, screen-free, and nurturing learning environment.",
     responsibilities: [
       "Seamless parent communication and daily updates feed",
@@ -225,7 +225,7 @@ export const PROJECTS: Project[] = [
     teamSize: 4,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.meetgoals.App&hl=en_IN",
-    screenshotUrl: "https://play-lh.googleusercontent.com/Kgo0QBy7DoCM2Jbjcu4Tn4UPH2YQ4b1aefjKUvKHLGaOEUGF750RWD_Jw_9aGfXSnT6147MR3vnIIhHZZBYF=s0-br30",
+    screenshotUrl: "/screenshots/meetgoals.webp",
     description: "A productivity and self-improvement app that helps users achieve goals, build better habits, improve focus, and overcome procrastination through personalized plans and guided techniques.",
     responsibilities: [
       "Personalized habit plans and reminder scheduling",
@@ -244,7 +244,7 @@ export const PROJECTS: Project[] = [
     teamSize: 2,
     isLiveOnPlayStore: true,
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.ogrelogic.startingfive&hl=en_IN",
-    screenshotUrl: "https://play-lh.googleusercontent.com/cyzdB7C51QAsV-YBIoOuMHLqXaCtmI1AJ87AgpySOhvtj6ZAt_QfO2lJMUpPink-rHzyovjy9MpjhO0gvh9TJ9c=s0-br30",
+    screenshotUrl: "/screenshots/starting-5.webp",
     description: "A youth basketball training and development platform offering skill training, leagues, tournaments, travel teams, private sessions, and college sports preparation for kids and teens from beginner to elite levels.",
     responsibilities: [
       "Built with Flutter (Cross-platform)",

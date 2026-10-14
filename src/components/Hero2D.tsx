@@ -47,7 +47,7 @@ export default function Hero2D() {
   ];
 
   return (
-    <section id="about" className="relative min-h-screen pt-28 pb-16 sm:pt-36 sm:pb-24 lg:pt-44 lg:pb-32 flex flex-col justify-center overflow-hidden">
+    <section id="about" className="relative pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32 lg:pb-14 flex flex-col justify-center overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         
         {/* Asymmetric Editorial Hero Grid */}
@@ -191,7 +191,7 @@ export default function Hero2D() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="pt-12 sm:pt-16 text-center flex flex-col items-center">
+        <div className="pt-6 sm:pt-8 text-center flex flex-col items-center">
           <a
             href="#projects"
             className="inline-flex flex-col items-center text-xs font-mono text-slate-400 hover:text-sky-300 transition-colors"

@@ -62,11 +62,11 @@ export default function SkillsSection() {
   ];
 
   return (
-    <section id="skills" className="py-20 sm:py-28 lg:py-32 relative colored-grid overflow-hidden">
+    <section id="skills" className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-md">
             <Layers className="w-3.5 h-3.5 text-sky-400" />
             <span>Technical Skills from CV</span>
@@ -115,8 +115,8 @@ export default function SkillsSection() {
         </div>
 
         {/* Technologies & Knowledge Section directly from CV */}
-        <div className="mt-14 luxury-glass p-6 sm:p-9 rounded-3xl border border-sky-400/20 shadow-xl">
-          <div className="flex items-center gap-3 mb-5">
+        <div className="mt-8 luxury-glass p-5 sm:p-7 rounded-3xl border border-sky-400/20 shadow-xl">
+          <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
               <Sparkles className="w-5 h-5" />
             </div>
@@ -144,7 +144,7 @@ export default function SkillsSection() {
         </div>
 
         {/* Responsibilities Section directly from CV */}
-        <div className="mt-8 luxury-glass p-6 sm:p-9 rounded-3xl border border-purple-400/20 shadow-xl">
+        <div className="mt-5 luxury-glass p-5 sm:p-7 rounded-3xl border border-purple-400/20 shadow-xl">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-600 flex items-center justify-center text-white shadow-md">
               <CheckCircle2 className="w-5 h-5" />
