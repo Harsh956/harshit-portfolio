@@ -1,166 +1,309 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Smartphone, CheckCircle, ShieldCheck, Zap, Code2, Layers, Activity, Sparkles } from 'lucide-react';
+import {
+  Smartphone,
+  CheckCircle,
+  ShieldCheck,
+  Zap,
+  Code2,
+  Layers,
+  Activity,
+  Sparkles,
+  Wifi,
+  BatteryCharging,
+  Sprout,
+  Ticket,
+  Target,
+  Play,
+  Pause,
+  RotateCcw,
+  Check,
+  Flame,
+  ArrowRight
+} from 'lucide-react';
 
 export default function PhoneMockup2D() {
-  const [activeTab, setActiveTab] = useState<'architecture' | 'metrics'>('architecture');
+  const [activeApp, setActiveApp] = useState<'rapagra' | 'immortal' | 'meetgoals'>('rapagra');
+  const [leafScanned, setLeafScanned] = useState(false);
+  const [seatBooked, setSeatBooked] = useState(false);
+  const [timerActive, setTimerActive] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState(25 * 60);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (timerActive && timerSeconds > 0) {
+      interval = setInterval(() => {
+        setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timerActive, timerSeconds]);
+
+  const formatTimer = (sec: number) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
 
   return (
-    <div className="relative w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[410px] mx-auto select-none">
-      {/* Outer Multi-color Radial Ambient Glow */}
-      <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-tr from-sky-500/25 via-indigo-500/20 to-pink-500/20 rounded-[50px] sm:rounded-[60px] blur-xl opacity-75 pointer-events-none animate-pulse-glow" />
+    <div className="relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px] mx-auto select-none">
+      
+      {/* Soft Multi-color Ambient Glow behind the phone */}
+      <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-tr from-sky-300/30 via-indigo-300/25 to-pink-300/25 rounded-[56px] blur-2xl opacity-80 pointer-events-none animate-pulse-glow" />
 
-      {/* 2D Flagship Smartphone Frame */}
-      <div className="relative bg-[#0d1427] rounded-[42px] sm:rounded-[52px] p-2.5 sm:p-3.5 shadow-2xl border-[3px] sm:border-4 border-indigo-500/30 ring-1 ring-sky-400/30">
+      {/* Flagship Titanium Phone Chassis */}
+      <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 rounded-[50px] p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(15,23,42,0.35),0_0_0_1px_rgba(255,255,255,0.2)] border-2 border-slate-700/60 ring-1 ring-slate-900/40">
         
-        {/* Hardware side buttons (hidden on very small viewports) */}
-        <div className="hidden sm:block absolute -left-[6px] top-28 w-[3px] h-10 bg-indigo-400/80 rounded-l" />
-        <div className="hidden sm:block absolute -left-[6px] top-42 w-[3px] h-14 bg-indigo-400/80 rounded-l" />
-        <div className="hidden sm:block absolute -right-[6px] top-32 w-[3px] h-16 bg-pink-400/80 rounded-r" />
+        {/* Hardware side buttons (Metallic finish) */}
+        <div className="absolute -left-[4px] top-24 w-[3px] h-9 bg-slate-600 rounded-l shadow-sm" />
+        <div className="absolute -left-[4px] top-36 w-[3px] h-12 bg-slate-600 rounded-l shadow-sm" />
+        <div className="absolute -left-[4px] top-52 w-[3px] h-12 bg-slate-600 rounded-l shadow-sm" />
+        <div className="absolute -right-[4px] top-32 w-[3px] h-16 bg-slate-600 rounded-r shadow-sm" />
 
-        {/* Inner Screen Container */}
-        <div className="relative bg-[#070d1e] rounded-[34px] sm:rounded-[42px] overflow-hidden border border-white/10 flex flex-col h-[520px] sm:h-[580px]">
+        {/* Inner Curved Display */}
+        <div className="relative bg-[#FAFAFC] rounded-[40px] overflow-hidden border border-slate-300/80 flex flex-col h-[540px] sm:h-[600px] shadow-inner">
           
-          {/* Top Status Bar & Dynamic Island */}
-          <div className="pt-2.5 px-4 sm:px-6 pb-2 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-300 border-b border-white/10 bg-[#091126]">
-            <span className="font-bold text-white tracking-wide">9:41</span>
+          {/* Subtle Diagonal Glass Glare */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/40 pointer-events-none z-30" />
 
-            {/* Dynamic Island Capsule */}
-            <div className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-black/85 border border-sky-400/30 flex items-center gap-1.5 sm:gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[9px] sm:text-[10px] text-sky-300 font-mono font-bold">Pixel 8 Pro</span>
+          {/* Top Status Bar with Dynamic Island */}
+          <div className="pt-2.5 px-5 pb-2 flex items-center justify-between text-[11px] font-mono font-bold text-slate-800 border-b border-slate-200/60 bg-white/90 backdrop-blur-md relative z-20">
+            <span>9:41</span>
+
+            {/* Dynamic Island Capsule with Camera Lens Reflection */}
+            <div className="px-3 py-1 rounded-full bg-slate-950 flex items-center gap-2 shadow-sm border border-slate-800">
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
+                <span className="w-1 h-1 rounded-full bg-sky-500/80" />
+              </span>
+              <span className="text-[10px] text-emerald-400 font-mono font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Pixel 9 Pro
+              </span>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px]">
-              <span className="text-emerald-400 font-mono font-bold">5G</span>
-              <span className="w-3.5 h-2 bg-emerald-400 rounded-sm inline-block" />
+            <div className="flex items-center gap-1.5 text-slate-700">
+              <span className="text-[10px] font-mono font-bold text-emerald-600">5G</span>
+              <Wifi className="w-3 h-3 text-slate-700" />
+              <div className="w-4 h-2 bg-slate-800 rounded-sm p-[1px] flex items-center">
+                <div className="w-3 h-full bg-emerald-500 rounded-xs" />
+              </div>
             </div>
           </div>
 
-          {/* Screen Body */}
-          <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3">
+          {/* Screen Content Body */}
+          <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 relative z-10 scrollbar-none">
             
-            {/* Developer Profile Header with Rich Colors */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-sky-900/40 via-indigo-900/40 to-purple-900/40 border border-sky-400/30 relative overflow-hidden shadow-lg">
+            {/* Developer Live App Hub Card */}
+            <div className="p-3.5 rounded-2xl bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white shadow-md relative overflow-hidden">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] sm:text-[10px] font-bold border border-emerald-500/40">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white font-mono text-[9px] font-bold backdrop-blur-xs">
+                  <ShieldCheck className="w-3 h-3 text-emerald-300" />
                   GOOGLE PLAY VERIFIED
                 </span>
-                <span className="text-[9px] sm:text-[10px] font-mono text-amber-300 font-bold bg-amber-500/20 px-1.5 py-0.5 rounded">
-                  ★ 4.8
+                <span className="text-[10px] font-mono text-amber-200 font-bold bg-black/20 px-1.5 py-0.5 rounded">
+                  ★ 4.8 Rating
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                Harshit Saxena
-                <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+              <h3 className="text-base sm:text-lg font-extrabold tracking-tight flex items-center justify-between">
+                <span>Harshit Saxena</span>
+                <span className="text-[10px] font-mono font-bold bg-white/20 px-2 py-0.5 rounded-full">8 Live Apps</span>
               </h3>
-              <p className="text-[11px] sm:text-xs text-sky-300 font-semibold mt-0.5">Senior Android & Mobile Architect</p>
+              <p className="text-[11px] text-sky-100 font-medium">Senior Android & Mobile Architect</p>
             </div>
 
-            {/* Quick Metrics Bar with Colorful Gradients */}
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
-              <div className="p-2 rounded-xl bg-gradient-to-b from-sky-950/40 to-slate-900/80 border border-sky-500/30">
-                <div className="text-base sm:text-lg font-black text-sky-400 font-mono">14</div>
-                <div className="text-[8px] sm:text-[9px] text-sky-200 uppercase font-mono font-bold">Projects</div>
-              </div>
-              <div className="p-2 rounded-xl bg-gradient-to-b from-purple-950/40 to-slate-900/80 border border-purple-500/30">
-                <div className="text-base sm:text-lg font-black text-purple-400 font-mono">7+ Yrs</div>
-                <div className="text-[8px] sm:text-[9px] text-purple-200 uppercase font-mono font-bold">Experience</div>
-              </div>
-              <div className="p-2 rounded-xl bg-gradient-to-b from-emerald-950/40 to-slate-900/80 border border-emerald-500/30">
-                <div className="text-base sm:text-lg font-black text-emerald-400 font-mono">8 Live</div>
-                <div className="text-[8px] sm:text-[9px] text-emerald-200 uppercase font-mono font-bold">Play Store</div>
-              </div>
-            </div>
-
-            {/* Tab Selector with Colorful Switch */}
-            <div className="flex items-center p-1 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+            {/* In-Phone App Navigation Tabs */}
+            <div className="flex items-center p-1 rounded-xl bg-slate-200/80 border border-slate-300/80">
               <button
-                onClick={() => setActiveTab('architecture')}
-                className={`flex-1 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition ${
-                  activeTab === 'architecture'
-                    ? 'bg-gradient-to-r from-sky-500 to-indigo-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
+                onClick={() => setActiveApp('rapagra')}
+                className={`flex-1 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
+                  activeApp === 'rapagra'
+                    ? 'bg-white text-emerald-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Architecture
+                <Sprout className="w-3 h-3 text-emerald-600" />
+                <span>Rapagra</span>
               </button>
               <button
-                onClick={() => setActiveTab('metrics')}
-                className={`flex-1 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition ${
-                  activeTab === 'metrics'
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
+                onClick={() => setActiveApp('immortal')}
+                className={`flex-1 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
+                  activeApp === 'immortal'
+                    ? 'bg-white text-sky-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Performance
+                <Ticket className="w-3 h-3 text-sky-600" />
+                <span>Immortal</span>
+              </button>
+              <button
+                onClick={() => setActiveApp('meetgoals')}
+                className={`flex-1 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
+                  activeApp === 'meetgoals'
+                    ? 'bg-white text-purple-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Target className="w-3 h-3 text-purple-600" />
+                <span>MeetGoals</span>
               </button>
             </div>
 
-            {/* Tab 1: Architecture Code View with Colorful Syntax */}
-            {activeTab === 'architecture' ? (
-              <div className="p-3 sm:p-3.5 rounded-2xl bg-[#030712]/95 border border-indigo-500/30 space-y-1.5 text-[10px] sm:text-[11px] font-mono shadow-inner overflow-hidden">
-                <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-slate-400 text-[9px] sm:text-[10px]">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-400" />
-                    <span className="w-2 h-2 rounded-full bg-yellow-400" />
-                    <span className="w-2 h-2 rounded-full bg-green-400" />
+            {/* Dynamic Interactive App Interface */}
+            {activeApp === 'rapagra' && (
+              <div className="p-3.5 rounded-2xl bg-white border border-emerald-200/90 shadow-sm space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                      <Sprout className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-bold text-slate-900">Rapagra Smart Agri</div>
+                      <div className="text-[9px] text-emerald-600 font-mono">IoT Sensor & AI Diagnostics</div>
+                    </div>
                   </div>
-                  <span className="text-sky-400 font-bold">AppViewModel.kt</span>
+                  <span className="text-[9px] font-mono bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded border border-emerald-200">
+                    BLE Online
+                  </span>
                 </div>
-                <div className="space-y-0.5 pt-0.5 leading-relaxed">
-                  <div className="text-pink-400 font-bold">@HiltViewModel</div>
-                  <div className="text-slate-200">
-                    class <span className="text-sky-300 font-bold">AppEngine</span> @Inject (
+
+                <div className="grid grid-cols-2 gap-2 text-center">
+                  <div className="p-2 rounded-xl bg-emerald-50/60 border border-emerald-100">
+                    <div className="text-base font-extrabold text-emerald-700 font-mono">76%</div>
+                    <div className="text-[9px] text-slate-600 font-medium">Soil Moisture</div>
                   </div>
-                  <div className="text-purple-300 pl-2 sm:pl-3">val repo: PlayStoreRepo</div>
-                  <div className="text-slate-200">) : ViewModel() &#123;</div>
-                  <div className="text-emerald-400 pl-2 sm:pl-3">val state = repo.flow</div>
-                  <div className="text-amber-300 pl-4 sm:pl-5">.stateIn(viewModelScope)</div>
-                  <div className="text-slate-500 pl-2 sm:pl-3">// Coroutines • Room DB</div>
-                  <div className="text-slate-200">&#125;</div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-3 sm:p-3.5 rounded-2xl bg-[#030712]/95 border border-purple-500/30 space-y-2.5 shadow-inner">
-                <div className="flex items-center justify-between text-[11px] sm:text-xs">
-                  <span className="text-slate-200 font-bold">UI Performance</span>
-                  <span className="text-emerald-400 font-mono font-bold bg-emerald-500/20 px-1.5 py-0.5 rounded text-[10px]">60 FPS LOCKED</span>
-                </div>
-                <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-white/10">
-                  <div className="bg-gradient-to-r from-emerald-400 via-sky-400 to-indigo-500 h-full w-[99%]" />
-                </div>
-                <div className="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-slate-300 pt-0.5">
-                  <div className="p-1.5 sm:p-2 rounded-xl bg-slate-900/80 border border-emerald-500/20">
-                    <div className="text-slate-400 text-[8px] sm:text-[9px]">ANR Rate</div>
-                    <div className="text-emerald-400 font-bold">&lt; 0.01%</div>
+                  <div className="p-2 rounded-xl bg-sky-50/60 border border-sky-100">
+                    <div className="text-base font-extrabold text-sky-700 font-mono">24.5°C</div>
+                    <div className="text-[9px] text-slate-600 font-medium">Ambient Temp</div>
                   </div>
-                  <div className="p-1.5 sm:p-2 rounded-xl bg-slate-900/80 border border-sky-500/20">
-                    <div className="text-slate-400 text-[8px] sm:text-[9px]">Cold Start</div>
-                    <div className="text-sky-400 font-bold">420ms</div>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-[11px] font-bold text-slate-800">Crop Health Index</div>
+                    <div className="text-[9px] text-slate-500">
+                      {leafScanned ? 'Leaf Scanned: 98% Healthy' : 'Ready to scan field'}
+                    </div>
                   </div>
+                  <button
+                    onClick={() => setLeafScanned(!leafScanned)}
+                    className="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[10px] font-bold shadow-xs hover:bg-emerald-700 transition"
+                  >
+                    {leafScanned ? 'Rescan Leaf' : 'Scan Leaf'}
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* Production Badge in Device */}
-            <div className="p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-indigo-950/30 to-purple-950/30 border border-indigo-500/30 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <Layers className="w-3.5 h-3.5 text-sky-400" />
-                <span className="text-slate-200 font-semibold text-[11px]">8 Live Play Store Apps</span>
+            {activeApp === 'immortal' && (
+              <div className="p-3.5 rounded-2xl bg-white border border-sky-200/90 shadow-sm space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
+                      <Ticket className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-bold text-slate-900">Immortal Seats</div>
+                      <div className="text-[9px] text-sky-600 font-mono">360° Real-Time Arena</div>
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-mono bg-sky-50 text-sky-700 font-bold px-1.5 py-0.5 rounded border border-sky-200">
+                    Live Booking
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-100 space-y-1 text-left">
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-900">
+                    <span>Madison Square Garden</span>
+                    <span className="text-sky-700 font-mono">$249.00</span>
+                  </div>
+                  <div className="text-[10px] text-slate-600 font-mono">Section 104 • Row A • VIP-1</div>
+                </div>
+
+                <button
+                  onClick={() => setSeatBooked(!seatBooked)}
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm ${
+                    seatBooked
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white hover:opacity-95'
+                  }`}
+                >
+                  {seatBooked ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Seat Reserved & Confirmed</span>
+                    </>
+                  ) : (
+                    <span>Instant Reserve ($249)</span>
+                  )}
+                </button>
               </div>
-              <span className="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/20">
-                VERIFIED
-              </span>
+            )}
+
+            {activeApp === 'meetgoals' && (
+              <div className="p-3.5 rounded-2xl bg-white border border-purple-200/90 shadow-sm space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                      <Target className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-bold text-slate-900">MeetGoals Focus</div>
+                      <div className="text-[9px] text-purple-600 font-mono">WorkManager & Habit Flow</div>
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-mono bg-purple-50 text-purple-700 font-bold px-1.5 py-0.5 rounded border border-purple-200 flex items-center gap-1">
+                    <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
+                    18 Days
+                  </span>
+                </div>
+
+                <div className="text-center py-1">
+                  <div className="text-3xl font-extrabold font-mono text-purple-700 tracking-wider">
+                    {formatTimer(timerSeconds)}
+                  </div>
+                  <div className="text-[9px] text-slate-500 font-mono mt-0.5">Deep Focus Pomodoro Block</div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setTimerActive(!timerActive)}
+                    className="flex-1 py-1.5 rounded-xl bg-purple-600 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm hover:bg-purple-700 transition"
+                  >
+                    {timerActive ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                    <span>{timerActive ? 'Pause' : 'Start Focus'}</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTimerActive(false);
+                      setTimerSeconds(25 * 60);
+                    }}
+                    className="p-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Architecture Telemetry Snippet */}
+            <div className="p-2.5 rounded-xl bg-slate-900 text-white space-y-1 shadow-inner text-left">
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span className="text-sky-400 font-bold">● Architecture Engine</span>
+                <span className="text-emerald-400 font-bold">60 FPS</span>
+              </div>
+              <div className="text-[10px] font-mono text-slate-300 leading-tight">
+                Kotlin Coroutines • StateFlow • Clean MVVM
+              </div>
             </div>
 
           </div>
 
           {/* Bottom Gesture Bar */}
-          <div className="p-2 sm:p-2.5 bg-[#091126] border-t border-white/10 flex items-center justify-center">
-            <div className="w-24 sm:w-28 h-1 bg-gradient-to-r from-sky-400 to-indigo-400 rounded-full" />
+          <div className="p-2 bg-white/90 border-t border-slate-200/80 flex items-center justify-center relative z-20">
+            <div className="w-24 sm:w-28 h-1 bg-slate-400 rounded-full" />
           </div>
 
         </div>

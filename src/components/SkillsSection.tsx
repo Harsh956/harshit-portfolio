@@ -21,43 +21,43 @@ export default function SkillsSection() {
       title: 'Programming Languages',
       icon: Code2,
       skills: TECHNICAL_SKILLS.programmingLanguages,
-      color: 'from-sky-500 to-blue-600',
-      badgeColor: 'bg-sky-500/10 text-sky-300 border-sky-400/20'
+      color: 'from-sky-600 to-blue-600',
+      badgeColor: 'bg-sky-50 text-sky-700 border-sky-200'
     },
     {
       title: 'Mobile Technologies',
       icon: Smartphone,
       skills: TECHNICAL_SKILLS.mobileTechnologies,
-      color: 'from-emerald-500 to-teal-600',
-      badgeColor: 'bg-emerald-500/10 text-emerald-300 border-emerald-400/20'
+      color: 'from-emerald-600 to-teal-600',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
     },
     {
       title: 'Libraries & Frameworks',
       icon: Layers,
       skills: TECHNICAL_SKILLS.librariesFrameworks,
-      color: 'from-indigo-500 to-purple-600',
-      badgeColor: 'bg-indigo-500/10 text-indigo-300 border-indigo-400/20'
+      color: 'from-indigo-600 to-purple-600',
+      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200'
     },
     {
       title: 'APIs & Integrations',
       icon: Globe,
       skills: TECHNICAL_SKILLS.apisIntegrations,
-      color: 'from-pink-500 to-rose-600',
-      badgeColor: 'bg-pink-500/10 text-pink-300 border-pink-400/20'
+      color: 'from-pink-600 to-rose-600',
+      badgeColor: 'bg-pink-50 text-pink-700 border-pink-200'
     },
     {
       title: 'Databases',
       icon: Database,
       skills: TECHNICAL_SKILLS.databases,
-      color: 'from-amber-500 to-orange-600',
-      badgeColor: 'bg-amber-500/10 text-amber-300 border-amber-400/20'
+      color: 'from-amber-600 to-orange-600',
+      badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
     },
     {
       title: 'Tools & IDEs',
       icon: Wrench,
       skills: TECHNICAL_SKILLS.tools,
-      color: 'from-purple-500 to-indigo-600',
-      badgeColor: 'bg-purple-500/10 text-purple-300 border-purple-400/20'
+      color: 'from-purple-600 to-indigo-600',
+      badgeColor: 'bg-purple-50 text-purple-700 border-purple-200'
     }
   ];
 
@@ -67,14 +67,14 @@ export default function SkillsSection() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-md">
-            <Layers className="w-3.5 h-3.5 text-sky-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200/90 text-xs font-mono text-sky-700 shadow-sm">
+            <Layers className="w-3.5 h-3.5 text-sky-600" />
             <span>Technical Skills from CV</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight">
             Technical <span className="text-gradient-vibrant">Skills</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             Strictly derived from Harshit Saxena's professional resume. Covering core programming languages, 
             mobile frameworks, APIs, databases, and development tools.
           </p>
@@ -87,13 +87,13 @@ export default function SkillsSection() {
             return (
               <div
                 key={cat.title}
-                className="luxury-card p-6 sm:p-7 rounded-3xl border border-white/10 hover:border-sky-400/40 transition-all duration-300 relative group overflow-hidden"
+                className="luxury-card p-6 sm:p-7 rounded-3xl border border-stone-200/90 hover:border-indigo-300 transition-all duration-300 relative group overflow-hidden shadow-xs hover:shadow-md"
               >
-                <div className="flex items-center gap-3.5 mb-5 pb-3 border-b border-white/10">
-                  <div className={`w-10 h-10 rounded-2xl bg-gradient-to-tr ${cat.color} flex items-center justify-center text-white shadow-md shrink-0`}>
+                <div className="flex items-center gap-3.5 mb-5 pb-3 border-b border-stone-200">
+                  <div className={`w-10 h-10 rounded-2xl bg-gradient-to-tr ${cat.color} flex items-center justify-center text-white shadow-xs shrink-0`}>
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-white text-base sm:text-lg">
+                  <h3 className="font-bold text-slate-900 text-base sm:text-lg">
                     {cat.title}
                   </h3>
                 </div>
@@ -115,28 +115,28 @@ export default function SkillsSection() {
         </div>
 
         {/* Technologies & Knowledge Section directly from CV */}
-        <div className="mt-8 luxury-glass p-5 sm:p-7 rounded-3xl border border-sky-400/20 shadow-xl">
+        <div className="mt-8 bg-white p-5 sm:p-7 rounded-3xl border border-stone-200/90 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-xs">
               <Sparkles className="w-5 h-5" />
             </div>
-            <div>
-              <h3 className="text-base sm:text-lg font-bold text-white">
+            <div className="text-left">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
                 Technologies & Knowledge (from CV)
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-500">
                 Core domain capabilities utilized across mobile development
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 text-xs sm:text-sm font-mono text-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 text-xs sm:text-sm font-mono text-slate-700">
             {TECHNICAL_SKILLS.technologiesAndKnowledge.map((item) => (
               <div
                 key={item}
-                className="p-3 rounded-2xl bg-slate-900/90 border border-white/10 hover:border-sky-400/40 transition-all flex items-center gap-2"
+                className="p-3 rounded-2xl bg-stone-50 border border-stone-200 hover:border-sky-300 transition-all flex items-center gap-2"
               >
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>{item}</span>
               </div>
             ))}
@@ -144,28 +144,28 @@ export default function SkillsSection() {
         </div>
 
         {/* Responsibilities Section directly from CV */}
-        <div className="mt-5 luxury-glass p-5 sm:p-7 rounded-3xl border border-purple-400/20 shadow-xl">
+        <div className="mt-5 bg-white p-5 sm:p-7 rounded-3xl border border-stone-200/90 shadow-sm">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-600 flex items-center justify-center text-white shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white shadow-xs">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <div>
-              <h3 className="text-base sm:text-lg font-bold text-white">
+            <div className="text-left">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
                 Key Responsibilities (from CV)
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-500">
                 Primary responsibilities executed across Android application lifecycle
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs sm:text-sm font-mono text-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs sm:text-sm font-mono text-slate-700">
             {TECHNICAL_SKILLS.keyResponsibilities.map((resp) => (
               <div
                 key={resp}
-                className="p-3.5 rounded-2xl bg-slate-900/90 border border-purple-500/20 flex items-center gap-2.5"
+                className="p-3.5 rounded-2xl bg-stone-50 border border-purple-200 flex items-center gap-2.5"
               >
-                <span className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-purple-600 shrink-0" />
                 <span className="font-semibold">{resp}</span>
               </div>
             ))}

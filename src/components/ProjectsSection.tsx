@@ -14,19 +14,29 @@ import {
   ShieldCheck,
   ArrowUpRight,
   FolderGit2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Maximize2,
+  ZoomIn
 } from 'lucide-react';
 
 export default function ProjectsSection() {
   const [filter, setFilter] = useState<'All' | 'Live' | 'Android' | 'Flutter'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [fullscreenScreenshot, setFullscreenScreenshot] = useState<{
+    url: string;
+    title: string;
+    playStoreUrl?: string;
+  } | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedProject(null);
+      if (e.key === 'Escape') {
+        setSelectedProject(null);
+        setFullscreenScreenshot(null);
+      }
     };
-    if (selectedProject) {
+    if (selectedProject || fullscreenScreenshot) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
@@ -34,7 +44,7 @@ export default function ProjectsSection() {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [selectedProject]);
+  }, [selectedProject, fullscreenScreenshot]);
 
   const filteredProjects = PROJECTS.filter((p) => {
     const matchesFilter =
@@ -62,42 +72,42 @@ export default function ProjectsSection() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="space-y-2 max-w-2xl text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full luxury-glass border border-sky-400/30 text-xs font-mono text-sky-300 shadow-sm">
-              <FolderGit2 className="w-3.5 h-3.5 text-sky-400" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200/90 text-xs font-mono text-sky-700 shadow-sm">
+              <FolderGit2 className="w-3.5 h-3.5 text-sky-600" />
               <span>Professional Projects from CV</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
               14 Professional <br className="hidden sm:block" />
               <span className="text-gradient-vibrant">Projects</span>
             </h2>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              All 14 projects directly from Harshit Saxena's CV. Live Play Store apps include authentic store screenshots and verified links. Completed projects without active store listings have external links cleanly omitted.
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+              All 14 projects directly from Harshit Saxena's CV. Live Play Store apps feature authentic full-length store screenshots. Completed projects without active store listings have external links cleanly omitted.
             </p>
           </div>
 
           {/* Quick Counter Badges */}
           <div className="flex flex-wrap gap-2 shrink-0 self-start md:self-end">
-            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl luxury-glass border border-emerald-500/30 bg-emerald-950/20">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-emerald-50 border border-emerald-300 shadow-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               <div className="text-left font-mono">
-                <div className="text-xs font-bold text-white">8 Live on Play Store</div>
-                <div className="text-[10px] text-emerald-400">With Real Screenshots</div>
+                <div className="text-xs font-bold text-emerald-900">8 Live on Play Store</div>
+                <div className="text-[10px] text-emerald-700">Full Screenshots Attached</div>
               </div>
             </div>
-            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl luxury-glass border border-white/10">
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white border border-stone-200 shadow-xs">
               <div className="text-left font-mono">
-                <div className="text-xs font-bold text-white">6 Production Projects</div>
-                <div className="text-[10px] text-slate-400">Enterprise / Client Delivery</div>
+                <div className="text-xs font-bold text-slate-800">6 Production Projects</div>
+                <div className="text-[10px] text-slate-500">Enterprise / Client Delivery</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Filter Navigation & Search Bar */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-5">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-6">
           
           {/* Segmented Filter Pills */}
-          <div className="flex items-center p-1.5 rounded-2xl luxury-glass border border-white/10 overflow-x-auto gap-1.5 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-1.5">
+          <div className="flex items-center p-1.5 rounded-2xl bg-white border border-stone-200/90 shadow-sm overflow-x-auto gap-1.5 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-1.5">
             {[
               { id: 'All', label: 'All Projects (14)' },
               { id: 'Live', label: '★ Live on Play Store (8)' },
@@ -109,8 +119,8 @@ export default function ProjectsSection() {
                 onClick={() => setFilter(tab.id as any)}
                 className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
                   filter === tab.id
-                    ? 'bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 {tab.label}
@@ -120,13 +130,13 @@ export default function ProjectsSection() {
 
           {/* Search Box */}
           <div className="relative w-full lg:w-80">
-            <Search className="w-4 h-4 text-sky-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-sky-600 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by tech, keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-2xl luxury-glass border border-white/10 text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-400/60 transition shadow-inner"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white border border-stone-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition shadow-xs"
             />
           </div>
 
@@ -137,7 +147,7 @@ export default function ProjectsSection() {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="luxury-card rounded-3xl p-5 sm:p-6 border border-white/10 flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5"
+              className="luxury-card rounded-3xl p-5 sm:p-6 border border-stone-200/90 flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-md"
             >
               {/* Colorful Top Accent Stripe */}
               <div
@@ -147,28 +157,53 @@ export default function ProjectsSection() {
 
               <div className="space-y-4 pt-1">
                 
-                {/* Real Google Play Screenshot Attached */}
+                {/* Full Uncropped Play Store Screenshot Container */}
                 {project.isLiveOnPlayStore && project.screenshotUrl ? (
-                  <div className="relative w-full h-48 sm:h-52 rounded-2xl overflow-hidden border border-white/10 bg-[#070d1e] group-hover:border-sky-400/40 transition">
+                  <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden border border-stone-200/90 bg-gradient-to-b from-stone-50 via-stone-100 to-stone-200/60 p-2.5 flex items-center justify-center group/screen transition-all">
+                    
+                    {/* Uncropped Mobile Screenshot */}
                     <img
                       src={project.screenshotUrl}
                       alt={`${project.title} Google Play Screenshot`}
-                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-auto max-w-full object-contain rounded-xl shadow-md transition-transform duration-300 group-hover/screen:scale-105 cursor-pointer"
                       loading="lazy"
+                      onClick={() =>
+                        setFullscreenScreenshot({
+                          url: project.screenshotUrl!,
+                          title: project.title,
+                          playStoreUrl: project.playStoreUrl,
+                        })
+                      }
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1120] via-transparent to-black/20 opacity-80" />
-                    <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-sm border border-emerald-400/50 text-[10px] font-mono text-emerald-300 font-bold flex items-center gap-1 shadow-md">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Play Store Screenshot
+
+                    {/* Google Play Store Badge */}
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-emerald-300 text-[10px] font-mono text-emerald-800 font-bold flex items-center gap-1 shadow-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Play Store App
                     </div>
+
+                    {/* Zoom / Full View Button on Hover */}
+                    <button
+                      onClick={() =>
+                        setFullscreenScreenshot({
+                          url: project.screenshotUrl!,
+                          title: project.title,
+                          playStoreUrl: project.playStoreUrl,
+                        })
+                      }
+                      className="absolute bottom-3 right-3 p-2 rounded-xl bg-white/95 backdrop-blur-sm border border-stone-200 text-slate-700 hover:text-indigo-600 hover:bg-white shadow-md transition opacity-90 sm:opacity-0 sm:group-hover/screen:opacity-100"
+                      title="View Full Screenshot"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 ) : (
-                  <div className="w-full h-20 rounded-2xl border border-white/5 bg-slate-900/40 p-3.5 flex flex-col justify-center">
-                    <span className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <div className="w-full h-24 rounded-2xl border border-stone-200 bg-stone-50 p-4 flex flex-col justify-center">
+                    <span className="text-[10px] font-mono text-slate-500 uppercase font-bold flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
                       Production Project from CV
                     </span>
-                    <span className="text-xs text-slate-300 mt-0.5">
+                    <span className="text-xs text-slate-700 font-semibold mt-0.5">
                       Client / Enterprise Delivered Application
                     </span>
                   </div>
@@ -179,15 +214,15 @@ export default function ProjectsSection() {
                   <span
                     className="text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase tracking-wider"
                     style={{
-                      backgroundColor: `${project.accentColor}25`,
+                      backgroundColor: `${project.accentColor}15`,
                       color: project.accentColor,
-                      border: `1px solid ${project.accentColor}50`,
+                      border: `1px solid ${project.accentColor}40`,
                     }}
                   >
                     {project.category}
                   </span>
 
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600 font-mono">
                     <Users className="w-3.5 h-3.5 text-slate-400" />
                     <span>Team: {project.teamSize}</span>
                   </div>
@@ -195,16 +230,16 @@ export default function ProjectsSection() {
 
                 {/* Title & Tagline from CV */}
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-sky-300 transition-colors leading-tight">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-sky-300/90 font-medium mt-1 leading-snug">
+                  <p className="text-xs sm:text-sm text-indigo-600 font-semibold mt-1 leading-snug">
                     {project.tagline}
                   </p>
                 </div>
 
                 {/* Description from CV */}
-                <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
                   {project.description}
                 </p>
 
@@ -213,7 +248,7 @@ export default function ProjectsSection() {
                   {project.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-lg bg-slate-900 border border-white/10 text-slate-300"
+                      className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700"
                     >
                       {tech}
                     </span>
@@ -221,11 +256,11 @@ export default function ProjectsSection() {
                 </div>
               </div>
 
-              {/* Card Footer: Conditional Linking (Requirement 3) */}
-              <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-3">
+              {/* Card Footer: Conditional Linking */}
+              <div className="pt-4 mt-4 border-t border-stone-200 flex items-center justify-between gap-3">
                 <button
                   onClick={() => setSelectedProject(project)}
-                  className="text-xs font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1 group/btn transition"
+                  className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/btn transition"
                 >
                   <span>CV Details</span>
                   <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -237,13 +272,13 @@ export default function ProjectsSection() {
                     href={project.playStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-md shrink-0"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-600 hover:text-white transition-all shadow-xs shrink-0"
                   >
                     <span>Play Store</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </a>
                 ) : (
-                  <span className="text-[10px] font-mono font-bold text-slate-400 px-2.5 py-1 rounded-lg bg-slate-900 border border-white/5">
+                  <span className="text-[10px] font-mono font-bold text-slate-500 px-2.5 py-1 rounded-lg bg-stone-100 border border-stone-200">
                     Completed Project
                   </span>
                 )}
@@ -256,71 +291,77 @@ export default function ProjectsSection() {
         {selectedProject && (
           <div
             onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-fade-in"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 backdrop-blur-md animate-fade-in"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl luxury-glass rounded-3xl p-5 sm:p-8 lg:p-10 border border-sky-400/30 shadow-2xl max-h-[88vh] overflow-y-auto"
+              className="relative w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-8 lg:p-10 border border-stone-200 shadow-2xl max-h-[88vh] overflow-y-auto"
             >
-              
               {/* Close Button */}
               <button
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-4 sm:top-6 right-4 sm:right-6 p-2 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+                className="absolute top-4 sm:top-6 right-4 sm:right-6 p-2 rounded-full bg-slate-100 text-slate-700 hover:text-slate-900 hover:bg-slate-200 transition"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Modal Header */}
-              <div className="space-y-2.5 mb-6 pr-8">
+              <div className="space-y-2.5 mb-6 pr-8 text-left">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className="text-xs font-mono font-bold px-3 py-1 rounded-full uppercase"
                     style={{
-                      backgroundColor: `${selectedProject.accentColor}30`,
+                      backgroundColor: `${selectedProject.accentColor}20`,
                       color: selectedProject.accentColor,
-                      border: `1px solid ${selectedProject.accentColor}60`,
+                      border: `1px solid ${selectedProject.accentColor}50`,
                     }}
                   >
                     {selectedProject.category}
                   </span>
-                  <span className="text-xs font-mono text-slate-300">
+                  <span className="text-xs font-mono text-slate-600">
                     Team Size: {selectedProject.teamSize}
                   </span>
                   {selectedProject.isLiveOnPlayStore ? (
-                    <span className="text-xs font-mono text-emerald-400 font-bold">
+                    <span className="text-xs font-mono text-emerald-700 font-bold">
                       ● Active on Google Play
                     </span>
                   ) : (
-                    <span className="text-xs font-mono text-slate-400">
+                    <span className="text-xs font-mono text-slate-500">
                       ● Client / Enterprise Project
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900">
                   {selectedProject.title}
                 </h3>
-                <p className="text-xs sm:text-sm font-semibold text-sky-300">
+                <p className="text-xs sm:text-sm font-semibold text-indigo-600">
                   {selectedProject.tagline}
                 </p>
               </div>
 
-              {/* Screenshot in Modal if Live */}
+              {/* Full Uncropped Screenshot in Modal */}
               {selectedProject.isLiveOnPlayStore && selectedProject.screenshotUrl && (
-                <div className="mb-6 rounded-2xl overflow-hidden border border-white/10 bg-slate-900 max-h-60">
+                <div className="mb-6 rounded-2xl overflow-hidden border border-stone-200 bg-gradient-to-b from-stone-50 to-stone-100 p-3 flex items-center justify-center max-h-[480px]">
                   <img
                     src={selectedProject.screenshotUrl}
                     alt={`${selectedProject.title} screenshot`}
-                    className="w-full h-full object-cover object-top"
+                    className="max-h-[440px] w-auto object-contain rounded-xl shadow-lg cursor-pointer"
+                    onClick={() =>
+                      setFullscreenScreenshot({
+                        url: selectedProject.screenshotUrl!,
+                        title: selectedProject.title,
+                        playStoreUrl: selectedProject.playStoreUrl,
+                      })
+                    }
                   />
                 </div>
               )}
 
               {/* Description directly from CV */}
-              <div className="space-y-4 text-xs sm:text-sm text-slate-200">
+              <div className="space-y-4 text-xs sm:text-sm text-slate-700 text-left">
                 <div className="space-y-1.5">
-                  <h4 className="font-mono text-xs text-sky-400 uppercase tracking-wider font-bold">
+                  <h4 className="font-mono text-xs text-sky-700 uppercase tracking-wider font-bold">
                     Project Description (from CV)
                   </h4>
                   <p className="leading-relaxed">
@@ -330,13 +371,13 @@ export default function ProjectsSection() {
 
                 {/* Key Responsibilities & Highlights */}
                 <div className="space-y-2">
-                  <h4 className="font-mono text-xs text-emerald-400 uppercase tracking-wider font-bold">
+                  <h4 className="font-mono text-xs text-emerald-700 uppercase tracking-wider font-bold">
                     Key Features & Technical Implementation
                   </h4>
                   <ul className="space-y-1.5">
                     {selectedProject.responsibilities.map((r, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-200">
-                        <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{r}</span>
                       </li>
                     ))}
@@ -345,14 +386,14 @@ export default function ProjectsSection() {
 
                 {/* Tech Stack */}
                 <div className="space-y-2">
-                  <h4 className="font-mono text-xs text-purple-400 uppercase tracking-wider font-bold">
+                  <h4 className="font-mono text-xs text-purple-700 uppercase tracking-wider font-bold">
                     Technologies
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedProject.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 rounded-xl bg-slate-900 border border-white/10 text-xs font-mono text-slate-200 font-medium"
+                        className="px-3 py-1 rounded-xl bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700 font-medium"
                       >
                         {tech}
                       </span>
@@ -362,10 +403,10 @@ export default function ProjectsSection() {
               </div>
 
               {/* Action Button: Conditional */}
-              <div className="mt-8 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="mt-8 pt-5 border-t border-stone-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 {selectedProject.isLiveOnPlayStore && selectedProject.playStoreUrl ? (
                   <>
-                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold">
+                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-700 font-bold">
                       <ShieldCheck className="w-4 h-4" />
                       <span>Verified Google Play Store Link</span>
                     </div>
@@ -373,18 +414,70 @@ export default function ProjectsSection() {
                       href={selectedProject.playStoreUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 hover:from-emerald-400 hover:to-teal-500 transition shadow-lg text-xs sm:text-sm"
+                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500 transition shadow-md text-xs sm:text-sm"
                     >
                       <span>Open on Google Play Store</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </a>
                   </>
                 ) : (
-                  <div className="w-full text-center text-xs font-mono text-slate-400 py-2">
+                  <div className="w-full text-center text-xs font-mono text-slate-500 py-2">
                     This project was delivered for client/enterprise operations (No public Play Store link).
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Dedicated Fullscreen Screenshot Lightbox */}
+        {fullscreenScreenshot && (
+          <div
+            onClick={() => setFullscreenScreenshot(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-xl w-full bg-white rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col items-center max-h-[92vh]"
+            >
+              <button
+                onClick={() => setFullscreenScreenshot(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="text-center mb-3">
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  {fullscreenScreenshot.title}
+                </h3>
+                <p className="text-xs text-emerald-700 font-mono font-semibold">
+                  Google Play Store App Full Screenshot
+                </p>
+              </div>
+
+              {/* High-Resolution Uncropped Full Mobile View */}
+              <div className="w-full flex items-center justify-center overflow-auto max-h-[72vh] p-2 bg-stone-50 rounded-2xl border border-stone-200">
+                <img
+                  src={fullscreenScreenshot.url}
+                  alt={`${fullscreenScreenshot.title} Full View`}
+                  className="max-h-[68vh] w-auto object-contain rounded-xl shadow-lg"
+                />
+              </div>
+
+              {fullscreenScreenshot.playStoreUrl && (
+                <div className="mt-3.5 w-full flex justify-end">
+                  <a
+                    href={fullscreenScreenshot.playStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm"
+                  >
+                    <span>View on Play Store</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         )}

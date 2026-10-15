@@ -14,7 +14,7 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#030712] text-slate-100 overflow-x-hidden">
+    <main className="relative min-h-screen bg-[#FAF8F5] text-slate-800 overflow-x-hidden">
       {/* 2D Ambient Background Mesh */}
       <AmbientBackground />
 
