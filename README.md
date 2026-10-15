@@ -17,9 +17,9 @@ Built with **Next.js 14**, **Tailwind CSS**, and **TypeScript**. Optimized for 1
   - **Starting 5**: Flutter basketball training video player
   - **MeetGoals**: Pomodoro timer & habit streak counter
 - 🌟 **All 14 Google Play Store Apps**: Direct links to all 14 published Android/Flutter apps with category filters, search bar, and architectural deep-dive modals.
-- 💼 **Executive Career Roadmap**: Complete milestone history covering Ogrelogic Solutions, Avaskm, Launchora, IIT Roorkee, Arise Data.
-- 🎓 **Education & Certifications**: BCA degree, Cetpa 6-month Android certification, CMS Haridwar Java certification.
-- 📬 **Direct Contact & Consultation**: One-click phone and email copy buttons, location pin, and glassmorphic contact form.
+- 💼 **Professional Experience**: 7+ years covering Ogrelogic Solutions, Triologic Enterprise Solutions, Logic Brains, Fugenx Technologies, Brainwork Technologies, and Javatpoint.
+- 🎓 **Education & Certifications**: B.Tech (ECE) Dr. A.P.J. Abdul Kalam Technical University, Diploma (ECE) BTEUP, Cyber Security & Core Java Certifications.
+- 📬 **Direct Contact Channel**: Secure contact form with silent inbox delivery, phone/email copy buttons, and location in Greater Noida, India.
 
 ---
 
