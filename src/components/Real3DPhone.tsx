@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, Component, ErrorInfo, ReactNode } from 'react';
 import * as THREE from 'three';
 import appScreenshotsData from '@/data/appScreenshots.json';
 import {
@@ -23,7 +23,8 @@ import {
   ExternalLink,
   ShieldCheck,
   Zap,
-  Info
+  Info,
+  Maximize2
 } from 'lucide-react';
 
 interface AppPreview {
@@ -52,7 +53,11 @@ const PREVIEW_APPS: AppPreview[] = [
     rating: '4.8',
     installs: '10K+',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.orelogic.rapagraApp&hl=en',
-    screenshots: appScreenshotsData['rapagra'] || ['/screenshots/rapagra-2.webp'],
+    screenshots: (appScreenshotsData as Record<string, string[]>)['rapagra'] || [
+      '/screenshots/rapagra-2.webp',
+      '/screenshots/rapagra-3.webp',
+      '/screenshots/rapagra-4.webp'
+    ],
     captions: [
       'Crop Foliage Health Diagnosis & Disease Risk Scanning',
       'Real-Time IoT Soil Moisture & Temperature Sensor Telemetry',
@@ -73,7 +78,11 @@ const PREVIEW_APPS: AppPreview[] = [
     rating: '4.9',
     installs: '50K+',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.immortalSeats.android&hl=en',
-    screenshots: appScreenshotsData['immortal-seats'] || ['/screenshots/immortal-seats-2.webp'],
+    screenshots: (appScreenshotsData as Record<string, string[]>)['immortal-seats'] || [
+      '/screenshots/immortal-seats-2.webp',
+      '/screenshots/immortal-seats-3.webp',
+      '/screenshots/immortal-seats-4.webp'
+    ],
     captions: [
       'Interactive 360° MetLife Arena Seating Chart',
       'Real-Time Seat View & Row Availability Matrix',
@@ -94,7 +103,11 @@ const PREVIEW_APPS: AppPreview[] = [
     rating: '4.8',
     installs: '5K+',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.meetgoals.App&hl=en_IN',
-    screenshots: appScreenshotsData['meetgoals'] || ['/screenshots/meetgoals-2.webp'],
+    screenshots: (appScreenshotsData as Record<string, string[]>)['meetgoals'] || [
+      '/screenshots/meetgoals-2.webp',
+      '/screenshots/meetgoals-3.webp',
+      '/screenshots/meetgoals-4.webp'
+    ],
     captions: [
       'Deep Focus Pomodoro Block & Habit Streaks',
       'Task Prioritization Matrix & Priority Flow',
@@ -115,7 +128,11 @@ const PREVIEW_APPS: AppPreview[] = [
     rating: '4.7',
     installs: '5K+',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.ogrelogic.startingfive&hl=en_IN',
-    screenshots: appScreenshotsData['starting-5'] || ['/screenshots/starting-5-2.webp'],
+    screenshots: (appScreenshotsData as Record<string, string[]>)['starting-5'] || [
+      '/screenshots/starting-5-2.webp',
+      '/screenshots/starting-5-3.webp',
+      '/screenshots/starting-5-4.webp'
+    ],
     captions: [
       'Youth Basketball Tactical Court Player',
       'Animated Playbook Diagrams & 60 FPS Drills',
@@ -129,16 +146,104 @@ const PREVIEW_APPS: AppPreview[] = [
   },
 ];
 
-export default function Real3DPhone() {
-  const mountRef = useRef<HTMLDivElement>(null);
+// Helper to create rounded rectangle shape in Three.js
+function createRoundedRectShape(width: number, height: number, radius: number): THREE.Shape {
+  const shape = new THREE.Shape();
+  const x = -width / 2;
+  const y = -height / 2;
+  shape.moveTo(x + radius, y);
+  shape.lineTo(x + width - radius, y);
+  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
+  shape.lineTo(x + width, y + height - radius);
+  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  shape.lineTo(x + radius, y + height);
+  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
+  shape.lineTo(x, y + radius);
+  shape.quadraticCurveTo(x, y, x + radius, y);
+  return shape;
+}
+
+// Fallback CSS 3D Phone in case WebGL is unavailable on older GPU/browser
+function FallbackPhonePreview({
+  currentApp,
+  currentScreenshotUrl,
+  currentCaption,
+  safeSlideIndex,
+  totalSlides,
+  handlePrevSlide,
+  handleNextSlide,
+  handleSelectApp,
+  activeAppIndex
+}: {
+  currentApp: AppPreview;
+  currentScreenshotUrl: string;
+  currentCaption: string;
+  safeSlideIndex: number;
+  totalSlides: number;
+  handlePrevSlide: () => void;
+  handleNextSlide: () => void;
+  handleSelectApp: (idx: number) => void;
+  activeAppIndex: number;
+}) {
+  return (
+    <div className="relative w-full max-w-[390px] mx-auto select-none py-2">
+      <div className="relative mx-auto rounded-[52px] p-3.5 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 shadow-2xl border-2 border-slate-700">
+        <div className="relative w-full h-[580px] bg-slate-950 rounded-[42px] overflow-hidden flex flex-col">
+          <div className="pt-2.5 px-5 pb-2 flex items-center justify-between text-[11px] font-mono font-bold text-slate-100 z-20 border-b border-white/10 bg-slate-900/90">
+            <span>9:41</span>
+            <div className="px-3 py-0.5 rounded-full bg-black text-[10px] text-white font-mono font-bold">
+              {currentApp.shortName}
+            </div>
+            <span className="text-emerald-400 font-bold">5G</span>
+          </div>
+          <div className="flex-1 relative flex items-center justify-center overflow-hidden bg-slate-950">
+            <img
+              src={currentScreenshotUrl}
+              alt={currentCaption}
+              className="w-full h-full object-cover object-top"
+            />
+            <button
+              onClick={handlePrevSlide}
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/75 text-white flex items-center justify-center"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleNextSlide}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/75 text-white flex items-center justify-center"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center gap-1.5 flex-wrap px-2 mt-3 mb-2">
+        {PREVIEW_APPS.map((app, idx) => (
+          <button
+            key={app.id}
+            onClick={() => handleSelectApp(idx)}
+            className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold ${
+              idx === activeAppIndex ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border'
+            }`}
+          >
+            {app.shortName}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Real3DPhoneInner() {
+  const canvasMountRef = useRef<HTMLDivElement>(null);
   const [activeAppIndex, setActiveAppIndex] = useState(0);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isAutoRotating, setIsAutoRotating] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const [viewAngle, setViewAngle] = useState<'perspective' | 'front' | 'back'>('perspective');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [webglSupported, setWebglSupported] = useState(true);
 
-  // References for Three.js objects
+  // Three.js instance refs
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const phoneGroupRef = useRef<THREE.Group | null>(null);
@@ -146,7 +251,7 @@ export default function Real3DPhone() {
   const textureCacheRef = useRef<Map<string, THREE.Texture>>(new Map());
   const shadowMeshRef = useRef<THREE.Mesh | null>(null);
 
-  // Angles & interpolation targets
+  // Rotation state & pointer tracking
   const targetRotationY = useRef(0.28);
   const targetRotationX = useRef(0.08);
   const currentRotationY = useRef(0.28);
@@ -160,24 +265,7 @@ export default function Real3DPhone() {
   const currentScreenshotUrl = currentApp.screenshots[safeSlideIndex] || currentApp.screenshots[0];
   const currentCaption = currentApp.captions[safeSlideIndex] || currentApp.featureTitle;
 
-  // Helper to create rounded rectangle shape
-  const createRoundedRectShape = (width: number, height: number, radius: number) => {
-    const shape = new THREE.Shape();
-    const x = -width / 2;
-    const y = -height / 2;
-    shape.moveTo(x + radius, y);
-    shape.lineTo(x + width - radius, y);
-    shape.quadraticCurveTo(x + width, y, x + width, y + radius);
-    shape.lineTo(x + width, y + height - radius);
-    shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    shape.lineTo(x + radius, y + height);
-    shape.quadraticCurveTo(x, y + height, x, y + height - radius);
-    shape.lineTo(x, y + radius);
-    shape.quadraticCurveTo(x, y, x + radius, y);
-    return shape;
-  };
-
-  // Helper to load or fetch texture from cache
+  // Cached texture loader
   const loadAppTexture = useCallback((url: string): THREE.Texture => {
     if (textureCacheRef.current.has(url)) {
       return textureCacheRef.current.get(url)!;
@@ -192,449 +280,455 @@ export default function Real3DPhone() {
     return texture;
   }, []);
 
-  // Update screen texture when active app or slide changes
+  // Update screen texture when app or slide changes WITHOUT rebuilding the scene
   useEffect(() => {
     if (!screenMeshRef.current) return;
-    const texture = loadAppTexture(currentScreenshotUrl);
-    const material = screenMeshRef.current.material as THREE.MeshBasicMaterial;
-    if (material) {
-      material.map = texture;
-      material.needsUpdate = true;
+    try {
+      const texture = loadAppTexture(currentScreenshotUrl);
+      const material = screenMeshRef.current.material as THREE.MeshBasicMaterial;
+      if (material) {
+        material.map = texture;
+        material.needsUpdate = true;
+      }
+    } catch (e) {
+      console.warn('Failed to update screen texture:', e);
     }
   }, [currentScreenshotUrl, loadAppTexture]);
 
-  // Three.js Scene Setup (Runs strictly on client)
+  // Main Three.js Scene Setup (Mounts ONCE on client)
   useEffect(() => {
-    const container = mountRef.current;
+    const container = canvasMountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 380;
-    const height = container.clientHeight || 560;
-
-    // 1. Scene
-    const scene = new THREE.Scene();
-    sceneRef.current = scene;
-
-    // 2. Camera
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0, 11.2);
-
-    // 3. WebGL Renderer
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
-    rendererRef.current = renderer;
-
-    container.replaceChildren(renderer.domElement);
-
-    // 4. Lights: Calibrated Studio Key, Fill, Rim & Floor Ambient
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.45);
-    scene.add(ambientLight);
-
-    // Key Light (warm studio white)
-    const keyLight = new THREE.DirectionalLight(0xfffdfa, 2.3);
-    keyLight.position.set(5.5, 7.5, 7.5);
-    scene.add(keyLight);
-
-    // Fill Light (soft cool daylight)
-    const fillLight = new THREE.DirectionalLight(0xecfdf5, 1.3);
-    fillLight.position.set(-6, -2, 5);
-    scene.add(fillLight);
-
-    // Rim Light (luxury purple/indigo reflection on metallic chassis)
-    const rimLight = new THREE.DirectionalLight(0x818cf8, 2.4);
-    rimLight.position.set(-5, 6, -5.5);
-    scene.add(rimLight);
-
-    // Secondary Cyan Rim on opposite edge
-    const cyanRim = new THREE.DirectionalLight(0x06b6d4, 1.4);
-    cyanRim.position.set(5, -5, -4.5);
-    scene.add(cyanRim);
-
-    // 5. Phone Group Hierarchy
-    const phoneGroup = new THREE.Group();
-    phoneGroupRef.current = phoneGroup;
-    scene.add(phoneGroup);
-
-    // Phone Model Dimensions (Ultra-Realistic Flagship Proportion)
-    const phoneWidth = 3.32;
-    const phoneHeight = 6.92;
-    const phoneThickness = 0.32;
-    const cornerRadius = 0.62;
-
-    // A. Main Titanium Chassis
-    const chassisShape = createRoundedRectShape(phoneWidth, phoneHeight, cornerRadius);
-    const extrudeSettings: THREE.ExtrudeGeometryOptions = {
-      depth: phoneThickness,
-      bevelEnabled: true,
-      bevelSegments: 8,
-      steps: 1,
-      bevelSize: 0.05,
-      bevelThickness: 0.05,
-      curveSegments: 20
-    };
-    const chassisGeo = new THREE.ExtrudeGeometry(chassisShape, extrudeSettings);
-    chassisGeo.center();
-
-    // Dark Brushed Titanium Chassis Material
-    const chassisMat = new THREE.MeshStandardMaterial({
-      color: 0x1b1e23,
-      roughness: 0.28,
-      metalness: 0.88
-    });
-    const chassisMesh = new THREE.Mesh(chassisGeo, chassisMat);
-    phoneGroup.add(chassisMesh);
-
-    // B. Polished Metallic Side Rim Band
-    const rimSettings: THREE.ExtrudeGeometryOptions = {
-      depth: phoneThickness * 0.95,
-      bevelEnabled: true,
-      bevelSegments: 5,
-      steps: 1,
-      bevelSize: 0.02,
-      bevelThickness: 0.02,
-      curveSegments: 20
-    };
-    const rimGeo = new THREE.ExtrudeGeometry(chassisShape, rimSettings);
-    rimGeo.center();
-    const rimMat = new THREE.MeshStandardMaterial({
-      color: 0x2e333d,
-      roughness: 0.16,
-      metalness: 0.96
-    });
-    const rimMesh = new THREE.Mesh(rimGeo, rimMat);
-    rimMesh.scale.set(1.008, 1.008, 1.0);
-    phoneGroup.add(rimMesh);
-
-    // Antenna Bands (4 subtle dark lines on edges)
-    const antennaMat = new THREE.MeshBasicMaterial({ color: 0x0f1115 });
-    const antennaPositions = [
-      { x: phoneWidth / 2 + 0.05, y: 1.8, z: 0 },
-      { x: phoneWidth / 2 + 0.05, y: -1.8, z: 0 },
-      { x: -phoneWidth / 2 - 0.05, y: 1.8, z: 0 },
-      { x: -phoneWidth / 2 - 0.05, y: -1.8, z: 0 }
-    ];
-    antennaPositions.forEach((pos) => {
-      const antGeo = new THREE.BoxGeometry(0.04, 0.08, phoneThickness * 1.02);
-      const antMesh = new THREE.Mesh(antGeo, antennaMat);
-      antMesh.position.set(pos.x, pos.y, pos.z);
-      phoneGroup.add(antMesh);
-    });
-
-    // C. Front Screen Mesh
-    const screenWidth = phoneWidth - 0.16;
-    const screenHeight = phoneHeight - 0.16;
-    const screenShape = createRoundedRectShape(screenWidth, screenHeight, cornerRadius - 0.08);
-    const screenGeo = new THREE.ShapeGeometry(screenShape, 24);
-
-    // Map screen UVs perfectly to the image texture
-    const pos = screenGeo.attributes.position;
-    const uvs = [];
-    for (let i = 0; i < pos.count; i++) {
-      const u = (pos.getX(i) + screenWidth / 2) / screenWidth;
-      const v = (pos.getY(i) + screenHeight / 2) / screenHeight;
-      uvs.push(u, v);
+    // Check WebGL availability safely
+    try {
+      const testCanvas = document.createElement('canvas');
+      const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+      if (!gl) {
+        setWebglSupported(false);
+        return;
+      }
+    } catch {
+      setWebglSupported(false);
+      return;
     }
-    screenGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
 
-    const initialTexture = loadAppTexture(currentScreenshotUrl);
-    const screenMat = new THREE.MeshBasicMaterial({
-      map: initialTexture
-    });
-    const screenMesh = new THREE.Mesh(screenGeo, screenMat);
-    screenMesh.position.z = phoneThickness / 2 + 0.053;
-    phoneGroup.add(screenMesh);
-    screenMeshRef.current = screenMesh;
-
-    // D. Front Protective Glass Layer with Realistic Light Reflection
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.86,
-      opacity: 0.16,
-      transparent: true,
-      roughness: 0.04,
-      metalness: 0.06,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.04
-    });
-    const glassMesh = new THREE.Mesh(screenGeo, glassMat);
-    glassMesh.position.z = phoneThickness / 2 + 0.056;
-    phoneGroup.add(glassMesh);
-
-    // E. Dynamic Island Pill at Top Center of Screen
-    const islandShape = createRoundedRectShape(0.88, 0.22, 0.11);
-    const islandGeo = new THREE.ShapeGeometry(islandShape, 16);
-    const islandMat = new THREE.MeshBasicMaterial({ color: 0x050608 });
-    const islandMesh = new THREE.Mesh(islandGeo, islandMat);
-    islandMesh.position.set(0, phoneHeight / 2 - 0.38, phoneThickness / 2 + 0.058);
-    phoneGroup.add(islandMesh);
-
-    // Selfie Camera Lens Dot inside Dynamic Island
-    const lensDotGeo = new THREE.CircleGeometry(0.045, 16);
-    const lensDotMat = new THREE.MeshBasicMaterial({ color: 0x0d1824 });
-    const lensDotMesh = new THREE.Mesh(lensDotGeo, lensDotMat);
-    lensDotMesh.position.set(-0.25, 0, 0.002);
-    islandMesh.add(lensDotMesh);
-
-    // Privacy Indicator Green Dot
-    const greenDotGeo = new THREE.CircleGeometry(0.02, 12);
-    const greenDotMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
-    const greenDotMesh = new THREE.Mesh(greenDotGeo, greenDotMat);
-    greenDotMesh.position.set(0.3, 0, 0.002);
-    islandMesh.add(greenDotMesh);
-
-    // Speaker Grill Cutout at Top Bezel
-    const speakerShape = createRoundedRectShape(0.48, 0.04, 0.02);
-    const speakerGeo = new THREE.ShapeGeometry(speakerShape, 8);
-    const speakerMat = new THREE.MeshBasicMaterial({ color: 0x141416 });
-    const speakerMesh = new THREE.Mesh(speakerGeo, speakerMat);
-    speakerMesh.position.set(0, phoneHeight / 2 - 0.09, phoneThickness / 2 + 0.054);
-    phoneGroup.add(speakerMesh);
-
-    // F. Side Physical Hardware Buttons
-    const buttonMat = new THREE.MeshStandardMaterial({
-      color: 0x22262b,
-      metalness: 0.92,
-      roughness: 0.18
-    });
-
-    // Power Button (Right Side)
-    const powerGeo = new THREE.BoxGeometry(0.05, 0.8, 0.14);
-    const powerMesh = new THREE.Mesh(powerGeo, buttonMat);
-    powerMesh.position.set(phoneWidth / 2 + 0.05, 0.7, 0);
-    phoneGroup.add(powerMesh);
-
-    // Volume Up (Left Side)
-    const volUpGeo = new THREE.BoxGeometry(0.05, 0.58, 0.14);
-    const volUpMesh = new THREE.Mesh(volUpGeo, buttonMat);
-    volUpMesh.position.set(-phoneWidth / 2 - 0.05, 1.15, 0);
-    phoneGroup.add(volUpMesh);
-
-    // Volume Down (Left Side)
-    const volDownGeo = new THREE.BoxGeometry(0.05, 0.58, 0.14);
-    const volDownMesh = new THREE.Mesh(volDownGeo, buttonMat);
-    volDownMesh.position.set(-phoneWidth / 2 - 0.05, 0.45, 0);
-    phoneGroup.add(volDownMesh);
-
-    // Action Button (Left Top Side)
-    const actionGeo = new THREE.BoxGeometry(0.05, 0.32, 0.14);
-    const actionMesh = new THREE.Mesh(actionGeo, buttonMat);
-    actionMesh.position.set(-phoneWidth / 2 - 0.05, 1.85, 0);
-    phoneGroup.add(actionMesh);
-
-    // G. Back Plate with Frosted Matte AG Glass Finish
-    const backShape = createRoundedRectShape(screenWidth, screenHeight, cornerRadius - 0.08);
-    const backGeo = new THREE.ShapeGeometry(backShape, 24);
-    const backMat = new THREE.MeshStandardMaterial({
-      color: 0x181a1f,
-      roughness: 0.42,
-      metalness: 0.35
-    });
-    const backMesh = new THREE.Mesh(backGeo, backMat);
-    backMesh.position.z = -phoneThickness / 2 - 0.053;
-    backMesh.rotation.y = Math.PI;
-    phoneGroup.add(backMesh);
-
-    // Subtle Architect Monogram on Back Plate
-    const logoShape = createRoundedRectShape(0.42, 0.42, 0.1);
-    const logoGeo = new THREE.ShapeGeometry(logoShape, 16);
-    const logoMat = new THREE.MeshStandardMaterial({
-      color: 0x4f46e5,
-      metalness: 0.85,
-      roughness: 0.25
-    });
-    const logoMesh = new THREE.Mesh(logoGeo, logoMat);
-    logoMesh.position.set(0, 0, -phoneThickness / 2 - 0.055);
-    logoMesh.rotation.y = Math.PI;
-    phoneGroup.add(logoMesh);
-
-    // H. Raised Triple Pro Camera Module on Back
-    const cameraIslandShape = createRoundedRectShape(1.42, 1.48, 0.34);
-    const cameraIslandSettings: THREE.ExtrudeGeometryOptions = {
-      depth: 0.14,
-      bevelEnabled: true,
-      bevelSegments: 4,
-      bevelSize: 0.03,
-      bevelThickness: 0.03,
-      curveSegments: 16
-    };
-    const cameraIslandGeo = new THREE.ExtrudeGeometry(cameraIslandShape, cameraIslandSettings);
-    cameraIslandGeo.center();
-    const cameraIslandMat = new THREE.MeshStandardMaterial({
-      color: 0x13161a,
-      roughness: 0.28,
-      metalness: 0.88
-    });
-    const cameraIslandMesh = new THREE.Mesh(cameraIslandGeo, cameraIslandMat);
-    cameraIslandMesh.position.set(
-      -phoneWidth / 2 + 1.02,
-      phoneHeight / 2 - 1.12,
-      -phoneThickness / 2 - 0.125
-    );
-    cameraIslandMesh.rotation.y = Math.PI;
-    phoneGroup.add(cameraIslandMesh);
-
-    // 3 Individual Camera Lenses with Polished Titanium Rings & Sapphire Elements
-    const lensRingGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.08, 28);
-    lensRingGeo.rotateX(Math.PI / 2);
-    const lensRingMat = new THREE.MeshStandardMaterial({
-      color: 0x475569,
-      metalness: 0.95,
-      roughness: 0.14
-    });
-
-    const lensGlassGeo = new THREE.CircleGeometry(0.19, 24);
-    const lensGlassMat = new THREE.MeshStandardMaterial({
-      color: 0x07111e,
-      roughness: 0.05,
-      metalness: 0.25
-    });
-
-    const lensPositions = [
-      { x: -0.32, y: 0.36 },
-      { x: -0.32, y: -0.36 },
-      { x: 0.34, y: 0.0 }
-    ];
-
-    lensPositions.forEach((pos) => {
-      const ring = new THREE.Mesh(lensRingGeo, lensRingMat);
-      ring.position.set(pos.x, pos.y, 0.08);
-
-      const glass = new THREE.Mesh(lensGlassGeo, lensGlassMat);
-      glass.position.set(0, 0, 0.042);
-      ring.add(glass);
-
-      // Deep optical pupil reflection
-      const pupilGeo = new THREE.CircleGeometry(0.09, 16);
-      const pupilMat = new THREE.MeshBasicMaterial({ color: 0x1e3a8a });
-      const pupil = new THREE.Mesh(pupilGeo, pupilMat);
-      pupil.position.set(0.02, 0.02, 0.002);
-      glass.add(pupil);
-
-      cameraIslandMesh.add(ring);
-    });
-
-    // Flash LED on Camera Module
-    const flashGeo = new THREE.CircleGeometry(0.1, 16);
-    const flashMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
-    const flashMesh = new THREE.Mesh(flashGeo, flashMat);
-    flashMesh.position.set(0.34, 0.44, 0.08);
-    cameraIslandMesh.add(flashMesh);
-
-    // LiDAR Sensor
-    const lidarGeo = new THREE.CircleGeometry(0.065, 16);
-    const lidarMat = new THREE.MeshBasicMaterial({ color: 0x09090b });
-    const lidarMesh = new THREE.Mesh(lidarGeo, lidarMat);
-    lidarMesh.position.set(0.34, -0.44, 0.08);
-    cameraIslandMesh.add(lidarMesh);
-
-    // I. Realistic Ground Contact Floor Shadow Plane (Underneath Phone)
-    const shadowCanvas = document.createElement('canvas');
-    shadowCanvas.width = 256;
-    shadowCanvas.height = 256;
-    const shadowCtx = shadowCanvas.getContext('2d')!;
-    const gradient = shadowCtx.createRadialGradient(128, 128, 12, 128, 128, 120);
-    gradient.addColorStop(0, 'rgba(15, 23, 42, 0.42)');
-    gradient.addColorStop(0.35, 'rgba(15, 23, 42, 0.20)');
-    gradient.addColorStop(0.7, 'rgba(15, 23, 42, 0.05)');
-    gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
-    shadowCtx.fillStyle = gradient;
-    shadowCtx.fillRect(0, 0, 256, 256);
-
-    const shadowTexture = new THREE.CanvasTexture(shadowCanvas);
-    const shadowGeo = new THREE.PlaneGeometry(5.4, 5.4);
-    const shadowMat = new THREE.MeshBasicMaterial({
-      map: shadowTexture,
-      transparent: true,
-      opacity: 0.65,
-      depthWrite: false
-    });
-    const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
-    shadowMesh.rotation.x = -Math.PI / 2;
-    shadowMesh.position.y = -3.95;
-    scene.add(shadowMesh);
-    shadowMeshRef.current = shadowMesh;
-
-    // Set Initial Angle
-    phoneGroup.rotation.y = 0.28;
-    phoneGroup.rotation.x = 0.08;
-
-    setIsLoaded(true);
-
-    // 6. Animation Loop (60 FPS Smooth Floating & Rotation)
     let animationFrameId: number;
-    const clock = new THREE.Clock();
+    let renderer: THREE.WebGLRenderer;
+    let scene: THREE.Scene;
+    let camera: THREE.PerspectiveCamera;
 
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+    try {
+      const width = container.clientWidth || 380;
+      const height = container.clientHeight || 560;
 
-      // Continuous Idle Float and Sway
-      const floatOffsetY = Math.sin(elapsedTime * 1.5) * 0.12;
-      phoneGroup.position.y = floatOffsetY;
+      // 1. Scene
+      scene = new THREE.Scene();
+      sceneRef.current = scene;
 
-      // Contact shadow responds naturally to float elevation
-      if (shadowMeshRef.current) {
-        const shadowScale = 1 - floatOffsetY * 0.35;
-        shadowMeshRef.current.scale.set(shadowScale, shadowScale, 1);
-        const sMat = shadowMeshRef.current.material as THREE.MeshBasicMaterial;
-        sMat.opacity = 0.58 - floatOffsetY * 0.7;
+      // 2. Camera
+      camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+      camera.position.set(0, 0, 11.2);
+
+      // 3. WebGL Renderer
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance'
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.18;
+      rendererRef.current = renderer;
+
+      // Mount canvas cleanly into empty container (No React children collision!)
+      container.appendChild(renderer.domElement);
+
+      // 4. Lights: Studio Key, Fill, and Metallic Edge Rim Lights
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.45);
+      scene.add(ambientLight);
+
+      const keyLight = new THREE.DirectionalLight(0xfffdfa, 2.3);
+      keyLight.position.set(5.5, 7.5, 7.5);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0xecfdf5, 1.3);
+      fillLight.position.set(-6, -2, 5);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.DirectionalLight(0x818cf8, 2.4);
+      rimLight.position.set(-5, 6, -5.5);
+      scene.add(rimLight);
+
+      const cyanRim = new THREE.DirectionalLight(0x06b6d4, 1.4);
+      cyanRim.position.set(5, -5, -4.5);
+      scene.add(cyanRim);
+
+      // 5. Phone Group Model
+      const phoneGroup = new THREE.Group();
+      phoneGroupRef.current = phoneGroup;
+      scene.add(phoneGroup);
+
+      const phoneWidth = 3.32;
+      const phoneHeight = 6.92;
+      const phoneThickness = 0.32;
+      const cornerRadius = 0.62;
+
+      // A. Main Titanium Chassis
+      const chassisShape = createRoundedRectShape(phoneWidth, phoneHeight, cornerRadius);
+      const extrudeSettings: THREE.ExtrudeGeometryOptions = {
+        depth: phoneThickness,
+        bevelEnabled: true,
+        bevelSegments: 8,
+        steps: 1,
+        bevelSize: 0.05,
+        bevelThickness: 0.05,
+        curveSegments: 20
+      };
+      const chassisGeo = new THREE.ExtrudeGeometry(chassisShape, extrudeSettings);
+      chassisGeo.center();
+
+      const chassisMat = new THREE.MeshStandardMaterial({
+        color: 0x1b1e23,
+        roughness: 0.28,
+        metalness: 0.88
+      });
+      const chassisMesh = new THREE.Mesh(chassisGeo, chassisMat);
+      phoneGroup.add(chassisMesh);
+
+      // B. Polished Metallic Side Rim Band
+      const rimSettings: THREE.ExtrudeGeometryOptions = {
+        depth: phoneThickness * 0.95,
+        bevelEnabled: true,
+        bevelSegments: 5,
+        steps: 1,
+        bevelSize: 0.02,
+        bevelThickness: 0.02,
+        curveSegments: 20
+      };
+      const rimGeo = new THREE.ExtrudeGeometry(chassisShape, rimSettings);
+      rimGeo.center();
+      const rimMat = new THREE.MeshStandardMaterial({
+        color: 0x2e333d,
+        roughness: 0.16,
+        metalness: 0.96
+      });
+      const rimMesh = new THREE.Mesh(rimGeo, rimMat);
+      rimMesh.scale.set(1.008, 1.008, 1.0);
+      phoneGroup.add(rimMesh);
+
+      // Antenna Bands
+      const antennaMat = new THREE.MeshBasicMaterial({ color: 0x0f1115 });
+      const antennaPositions = [
+        { x: phoneWidth / 2 + 0.05, y: 1.8, z: 0 },
+        { x: phoneWidth / 2 + 0.05, y: -1.8, z: 0 },
+        { x: -phoneWidth / 2 - 0.05, y: 1.8, z: 0 },
+        { x: -phoneWidth / 2 - 0.05, y: -1.8, z: 0 }
+      ];
+      antennaPositions.forEach((pos) => {
+        const antGeo = new THREE.BoxGeometry(0.04, 0.08, phoneThickness * 1.02);
+        const antMesh = new THREE.Mesh(antGeo, antennaMat);
+        antMesh.position.set(pos.x, pos.y, pos.z);
+        phoneGroup.add(antMesh);
+      });
+
+      // C. Front Screen Mesh
+      const screenWidth = phoneWidth - 0.16;
+      const screenHeight = phoneHeight - 0.16;
+      const screenShape = createRoundedRectShape(screenWidth, screenHeight, cornerRadius - 0.08);
+      const screenGeo = new THREE.ShapeGeometry(screenShape, 24);
+
+      // Map UVs cleanly
+      const pos = screenGeo.attributes.position;
+      const uvs = [];
+      for (let i = 0; i < pos.count; i++) {
+        const u = (pos.getX(i) + screenWidth / 2) / screenWidth;
+        const v = (pos.getY(i) + screenHeight / 2) / screenHeight;
+        uvs.push(u, v);
+      }
+      screenGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+
+      const initialTexture = loadAppTexture(PREVIEW_APPS[0].screenshots[0]);
+      const screenMat = new THREE.MeshBasicMaterial({ map: initialTexture });
+      const screenMesh = new THREE.Mesh(screenGeo, screenMat);
+      screenMesh.position.z = phoneThickness / 2 + 0.053;
+      phoneGroup.add(screenMesh);
+      screenMeshRef.current = screenMesh;
+
+      // D. Front Glass Specular Reflection Layer
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transmission: 0.86,
+        opacity: 0.16,
+        transparent: true,
+        roughness: 0.04,
+        metalness: 0.06,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.04
+      });
+      const glassMesh = new THREE.Mesh(screenGeo, glassMat);
+      glassMesh.position.z = phoneThickness / 2 + 0.056;
+      phoneGroup.add(glassMesh);
+
+      // E. Dynamic Island Pill
+      const islandShape = createRoundedRectShape(0.88, 0.22, 0.11);
+      const islandGeo = new THREE.ShapeGeometry(islandShape, 16);
+      const islandMat = new THREE.MeshBasicMaterial({ color: 0x050608 });
+      const islandMesh = new THREE.Mesh(islandGeo, islandMat);
+      islandMesh.position.set(0, phoneHeight / 2 - 0.38, phoneThickness / 2 + 0.058);
+      phoneGroup.add(islandMesh);
+
+      // Selfie lens dot inside Dynamic Island
+      const lensDotGeo = new THREE.CircleGeometry(0.045, 16);
+      const lensDotMat = new THREE.MeshBasicMaterial({ color: 0x0d1824 });
+      const lensDotMesh = new THREE.Mesh(lensDotGeo, lensDotMat);
+      lensDotMesh.position.set(-0.25, 0, 0.002);
+      islandMesh.add(lensDotMesh);
+
+      // Privacy indicator green dot
+      const greenDotGeo = new THREE.CircleGeometry(0.02, 12);
+      const greenDotMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+      const greenDotMesh = new THREE.Mesh(greenDotGeo, greenDotMat);
+      greenDotMesh.position.set(0.3, 0, 0.002);
+      islandMesh.add(greenDotMesh);
+
+      // Speaker Grill Cutout
+      const speakerShape = createRoundedRectShape(0.48, 0.04, 0.02);
+      const speakerGeo = new THREE.ShapeGeometry(speakerShape, 8);
+      const speakerMat = new THREE.MeshBasicMaterial({ color: 0x141416 });
+      const speakerMesh = new THREE.Mesh(speakerGeo, speakerMat);
+      speakerMesh.position.set(0, phoneHeight / 2 - 0.09, phoneThickness / 2 + 0.054);
+      phoneGroup.add(speakerMesh);
+
+      // F. Side Hardware Buttons
+      const buttonMat = new THREE.MeshStandardMaterial({
+        color: 0x22262b,
+        metalness: 0.92,
+        roughness: 0.18
+      });
+
+      const powerGeo = new THREE.BoxGeometry(0.05, 0.8, 0.14);
+      const powerMesh = new THREE.Mesh(powerGeo, buttonMat);
+      powerMesh.position.set(phoneWidth / 2 + 0.05, 0.7, 0);
+      phoneGroup.add(powerMesh);
+
+      const volUpGeo = new THREE.BoxGeometry(0.05, 0.58, 0.14);
+      const volUpMesh = new THREE.Mesh(volUpGeo, buttonMat);
+      volUpMesh.position.set(-phoneWidth / 2 - 0.05, 1.15, 0);
+      phoneGroup.add(volUpMesh);
+
+      const volDownGeo = new THREE.BoxGeometry(0.05, 0.58, 0.14);
+      const volDownMesh = new THREE.Mesh(volDownGeo, buttonMat);
+      volDownMesh.position.set(-phoneWidth / 2 - 0.05, 0.45, 0);
+      phoneGroup.add(volDownMesh);
+
+      // G. Back Plate with Matte AG Glass
+      const backShape = createRoundedRectShape(screenWidth, screenHeight, cornerRadius - 0.08);
+      const backGeo = new THREE.ShapeGeometry(backShape, 24);
+      const backMat = new THREE.MeshStandardMaterial({
+        color: 0x181a1f,
+        roughness: 0.42,
+        metalness: 0.35
+      });
+      const backMesh = new THREE.Mesh(backGeo, backMat);
+      backMesh.position.z = -phoneThickness / 2 - 0.053;
+      backMesh.rotation.y = Math.PI;
+      phoneGroup.add(backMesh);
+
+      // Back Plate Monogram
+      const logoShape = createRoundedRectShape(0.42, 0.42, 0.1);
+      const logoGeo = new THREE.ShapeGeometry(logoShape, 16);
+      const logoMat = new THREE.MeshStandardMaterial({
+        color: 0x4f46e5,
+        metalness: 0.85,
+        roughness: 0.25
+      });
+      const logoMesh = new THREE.Mesh(logoGeo, logoMat);
+      logoMesh.position.set(0, 0, -phoneThickness / 2 - 0.055);
+      logoMesh.rotation.y = Math.PI;
+      phoneGroup.add(logoMesh);
+
+      // H. Pro Triple Camera Module on Back
+      const cameraIslandShape = createRoundedRectShape(1.42, 1.48, 0.34);
+      const cameraIslandSettings: THREE.ExtrudeGeometryOptions = {
+        depth: 0.14,
+        bevelEnabled: true,
+        bevelSegments: 4,
+        bevelSize: 0.03,
+        bevelThickness: 0.03,
+        curveSegments: 16
+      };
+      const cameraIslandGeo = new THREE.ExtrudeGeometry(cameraIslandShape, cameraIslandSettings);
+      cameraIslandGeo.center();
+      const cameraIslandMat = new THREE.MeshStandardMaterial({
+        color: 0x13161a,
+        roughness: 0.28,
+        metalness: 0.88
+      });
+      const cameraIslandMesh = new THREE.Mesh(cameraIslandGeo, cameraIslandMat);
+      cameraIslandMesh.position.set(
+        -phoneWidth / 2 + 1.02,
+        phoneHeight / 2 - 1.12,
+        -phoneThickness / 2 - 0.125
+      );
+      cameraIslandMesh.rotation.y = Math.PI;
+      phoneGroup.add(cameraIslandMesh);
+
+      // 3 Camera Lenses with Titanium Rings
+      const lensRingGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.08, 28);
+      lensRingGeo.rotateX(Math.PI / 2);
+      const lensRingMat = new THREE.MeshStandardMaterial({
+        color: 0x475569,
+        metalness: 0.95,
+        roughness: 0.14
+      });
+
+      const lensGlassGeo = new THREE.CircleGeometry(0.19, 24);
+      const lensGlassMat = new THREE.MeshStandardMaterial({
+        color: 0x07111e,
+        roughness: 0.05,
+        metalness: 0.25
+      });
+
+      const lensPositions = [
+        { x: -0.32, y: 0.36 },
+        { x: -0.32, y: -0.36 },
+        { x: 0.34, y: 0.0 }
+      ];
+
+      lensPositions.forEach((lPos) => {
+        const ring = new THREE.Mesh(lensRingGeo, lensRingMat);
+        ring.position.set(lPos.x, lPos.y, 0.08);
+
+        const glass = new THREE.Mesh(lensGlassGeo, lensGlassMat);
+        glass.position.set(0, 0, 0.042);
+        ring.add(glass);
+
+        const pupilGeo = new THREE.CircleGeometry(0.09, 16);
+        const pupilMat = new THREE.MeshBasicMaterial({ color: 0x1e3a8a });
+        const pupil = new THREE.Mesh(pupilGeo, pupilMat);
+        pupil.position.set(0.02, 0.02, 0.002);
+        glass.add(pupil);
+
+        cameraIslandMesh.add(ring);
+      });
+
+      // Flash & LiDAR
+      const flashGeo = new THREE.CircleGeometry(0.1, 16);
+      const flashMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+      const flashMesh = new THREE.Mesh(flashGeo, flashMat);
+      flashMesh.position.set(0.34, 0.44, 0.08);
+      cameraIslandMesh.add(flashMesh);
+
+      const lidarGeo = new THREE.CircleGeometry(0.065, 16);
+      const lidarMat = new THREE.MeshBasicMaterial({ color: 0x09090b });
+      const lidarMesh = new THREE.Mesh(lidarGeo, lidarMat);
+      lidarMesh.position.set(0.34, -0.44, 0.08);
+      cameraIslandMesh.add(lidarMesh);
+
+      // I. Ground Contact Shadow
+      const shadowCanvas = document.createElement('canvas');
+      shadowCanvas.width = 256;
+      shadowCanvas.height = 256;
+      const shadowCtx = shadowCanvas.getContext('2d');
+      if (shadowCtx) {
+        const gradient = shadowCtx.createRadialGradient(128, 128, 12, 128, 128, 120);
+        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.42)');
+        gradient.addColorStop(0.35, 'rgba(15, 23, 42, 0.20)');
+        gradient.addColorStop(0.7, 'rgba(15, 23, 42, 0.05)');
+        gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+        shadowCtx.fillStyle = gradient;
+        shadowCtx.fillRect(0, 0, 256, 256);
       }
 
-      // Auto-Orbit Mode
-      if (isAutoRotating && !isPointerDown.current) {
-        targetRotationY.current += 0.006;
-      }
+      const shadowTexture = new THREE.CanvasTexture(shadowCanvas);
+      const shadowGeo = new THREE.PlaneGeometry(5.4, 5.4);
+      const shadowMat = new THREE.MeshBasicMaterial({
+        map: shadowTexture,
+        transparent: true,
+        opacity: 0.65,
+        depthWrite: false
+      });
+      const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+      shadowMesh.rotation.x = -Math.PI / 2;
+      shadowMesh.position.y = -3.95;
+      scene.add(shadowMesh);
+      shadowMeshRef.current = shadowMesh;
 
-      // Smooth Lerp Towards Target Rotation
-      const lerpFactor = 0.065;
-      currentRotationY.current += (targetRotationY.current - currentRotationY.current) * lerpFactor;
-      currentRotationX.current += (targetRotationX.current - currentRotationX.current) * lerpFactor;
+      // Initial Angles
+      phoneGroup.rotation.y = 0.28;
+      phoneGroup.rotation.x = 0.08;
 
-      phoneGroup.rotation.y = currentRotationY.current;
-      phoneGroup.rotation.x = currentRotationX.current;
+      setIsReady(true);
 
-      renderer.render(scene, camera);
-    };
+      // 6. Animation Loop (Smooth 60 FPS)
+      const clock = new THREE.Clock();
 
-    animate();
+      const animate = () => {
+        animationFrameId = requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
 
-    // 7. Resize Observer
-    const handleResize = () => {
-      if (!container) return;
-      const newWidth = container.clientWidth;
-      const newHeight = container.clientHeight;
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
-    };
+        // Continuous Gentle Floating & Sway
+        const floatOffsetY = Math.sin(elapsedTime * 1.5) * 0.12;
+        phoneGroup.position.y = floatOffsetY;
 
-    window.addEventListener('resize', handleResize);
+        if (shadowMeshRef.current) {
+          const shadowScale = 1 - floatOffsetY * 0.35;
+          shadowMeshRef.current.scale.set(shadowScale, shadowScale, 1);
+          const sMat = shadowMeshRef.current.material as THREE.MeshBasicMaterial;
+          sMat.opacity = 0.58 - floatOffsetY * 0.7;
+        }
 
-    // 8. Cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-      renderer.dispose();
-      chassisGeo.dispose();
-      rimGeo.dispose();
-      screenGeo.dispose();
-      cameraIslandGeo.dispose();
-      shadowGeo.dispose();
-    };
-  }, [loadAppTexture, currentScreenshotUrl]);
+        // Auto Orbit
+        if (isAutoRotating && !isPointerDown.current) {
+          targetRotationY.current += 0.006;
+        }
+
+        // Smooth Lerp
+        const lerpFactor = 0.065;
+        currentRotationY.current += (targetRotationY.current - currentRotationY.current) * lerpFactor;
+        currentRotationX.current += (targetRotationX.current - currentRotationX.current) * lerpFactor;
+
+        phoneGroup.rotation.y = currentRotationY.current;
+        phoneGroup.rotation.x = currentRotationX.current;
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+      // 7. Resize Observer
+      const handleResize = () => {
+        if (!container || !camera || !renderer) return;
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      // 8. Safe Cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        cancelAnimationFrame(animationFrameId);
+        if (renderer && renderer.domElement && renderer.domElement.parentNode === container) {
+          container.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
+      };
+    } catch (err) {
+      console.error('Three.js setup error:', err);
+      setWebglSupported(false);
+    }
+  }, [loadAppTexture, isAutoRotating]);
 
   // Pointer & Drag Handlers for 360° Real 3D Rotation
   const handlePointerDown = (e: React.PointerEvent) => {
     isPointerDown.current = true;
-    setIsDragging(true);
     setIsAutoRotating(false);
     pointerStart.current = {
       x: e.clientX,
@@ -654,7 +748,7 @@ export default function Real3DPhone() {
       targetRotationX.current = Math.max(-0.65, Math.min(0.65, pointerStart.current.rotX + deltaY));
     } else {
       // Subtle parallax hover tilt when hovering without dragging
-      const rect = mountRef.current?.getBoundingClientRect();
+      const rect = canvasMountRef.current?.getBoundingClientRect();
       if (!rect) return;
       const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
@@ -671,7 +765,6 @@ export default function Real3DPhone() {
 
   const handlePointerUp = (e: React.PointerEvent) => {
     isPointerDown.current = false;
-    setIsDragging(false);
     (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
   };
 
@@ -691,7 +784,6 @@ export default function Real3DPhone() {
     }
   };
 
-  // Screenshot Slide Navigation
   const handlePrevSlide = () => {
     setCurrentSlideIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
   };
@@ -703,13 +795,27 @@ export default function Real3DPhone() {
   const handleSelectApp = (index: number) => {
     setActiveAppIndex(index);
     setCurrentSlideIndex(0);
-    // Subtle spin accent on app switch
     targetRotationY.current += 0.35;
   };
 
+  if (!webglSupported) {
+    return (
+      <FallbackPhonePreview
+        currentApp={currentApp}
+        currentScreenshotUrl={currentScreenshotUrl}
+        currentCaption={currentCaption}
+        safeSlideIndex={safeSlideIndex}
+        totalSlides={totalSlides}
+        handlePrevSlide={handlePrevSlide}
+        handleNextSlide={handleNextSlide}
+        handleSelectApp={handleSelectApp}
+        activeAppIndex={activeAppIndex}
+      />
+    );
+  }
+
   return (
     <div className="relative w-full max-w-[390px] sm:max-w-[420px] lg:max-w-[440px] mx-auto select-none py-1">
-      
       {/* Dynamic Ambient Luxury Glow matching the App Theme */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[390px] h-[520px] rounded-full blur-[95px] opacity-35 pointer-events-none transition-colors duration-700 -z-10"
@@ -762,28 +868,25 @@ export default function Real3DPhone() {
         </button>
       </div>
 
-      {/* Three.js Interactive WebGL Canvas Container */}
+      {/* Three.js Dedicated Empty Mount Container (Strictly NO React children inside) */}
       <div
-        ref={mountRef}
+        ref={canvasMountRef}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        className={`relative w-full h-[510px] sm:h-[570px] cursor-grab active:cursor-grabbing touch-none transition-opacity duration-500 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
+        className="relative w-full h-[510px] sm:h-[570px] cursor-grab active:cursor-grabbing touch-none"
         style={{ perspective: 1200 }}
-      >
-        {/* Fallback skeleton if WebGL initializes */}
-        {!isLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin" />
-          </div>
-        )}
-      </div>
+      />
+
+      {/* Loading Overlay Sibling (Outside canvas container) */}
+      {!isReady && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-12 h-12 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin" />
+        </div>
+      )}
 
       {/* Floating Screenshot Slide Navigation Controls Directly Over Canvas Bottom */}
       <div className="flex items-center justify-between px-2 -mt-6 mb-2 z-20 relative">
-        {/* Prev Screenshot Button */}
         <button
           onClick={handlePrevSlide}
           className="w-9 h-9 rounded-full bg-white/95 border border-stone-200/90 shadow-md text-slate-800 flex items-center justify-center hover:bg-stone-50 active:scale-95 transition"
@@ -829,7 +932,6 @@ export default function Real3DPhone() {
           </button>
         </div>
 
-        {/* Next Screenshot Button */}
         <button
           onClick={handleNextSlide}
           className="w-9 h-9 rounded-full bg-white/95 border border-stone-200/90 shadow-md text-slate-800 flex items-center justify-center hover:bg-stone-50 active:scale-95 transition"
@@ -906,7 +1008,57 @@ export default function Real3DPhone() {
           <span>Interactive 3D WebGL • Real Play Store Screen Mapped to 3D Glass</span>
         </p>
       </div>
-
     </div>
+  );
+}
+
+// React Error Boundary Wrapper to guarantee page NEVER crashes
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class PhoneErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.warn('Real3DPhone Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      const defaultApp = PREVIEW_APPS[0];
+      return (
+        <FallbackPhonePreview
+          currentApp={defaultApp}
+          currentScreenshotUrl={defaultApp.screenshots[0]}
+          currentCaption={defaultApp.featureTitle}
+          safeSlideIndex={0}
+          totalSlides={defaultApp.screenshots.length}
+          handlePrevSlide={() => {}}
+          handleNextSlide={() => {}}
+          handleSelectApp={() => {}}
+          activeAppIndex={0}
+        />
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default function Real3DPhone() {
+  return (
+    <PhoneErrorBoundary>
+      <Real3DPhoneInner />
+    </PhoneErrorBoundary>
   );
 }
