@@ -1,8 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import PhoneMockup2D from './PhoneMockup2D';
+
+const Real3DPhone = dynamic(() => import('./Real3DPhone'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full max-w-[390px] h-[560px] mx-auto rounded-[48px] bg-white/70 border border-stone-200/90 shadow-lg flex flex-col items-center justify-center p-8 backdrop-blur-md">
+      <div className="w-12 h-12 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin mb-4" />
+      <span className="text-xs font-mono font-bold text-slate-800">Initializing 3D Hardware Device...</span>
+      <span className="text-[10px] font-mono text-slate-500 mt-1">WebGL 3D Engine • Three.js</span>
+    </div>
+  ),
+});
 import {
   Smartphone,
   ExternalLink,
@@ -157,9 +168,9 @@ export default function Hero2D() {
 
           </div>
 
-          {/* Right Column: 3D Perspective Smartphone Mockup */}
+          {/* Right Column: 3D Hardware Smartphone Model */}
           <div className="lg:col-span-5 relative flex items-center justify-center mt-6 lg:mt-0">
-            <PhoneMockup2D />
+            <Real3DPhone />
           </div>
 
         </div>
