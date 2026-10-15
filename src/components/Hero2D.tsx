@@ -51,10 +51,10 @@ export default function Hero2D() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         
         {/* Asymmetric Editorial Hero Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
           {/* Left Column: Bold Typographic Narrative & Actions */}
-          <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-left">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-7 text-left">
             
             {/* Top Status & Role Pill */}
             <div className="flex flex-wrap items-center gap-2.5">
@@ -72,8 +72,8 @@ export default function Hero2D() {
               </div>
             </div>
 
-            {/* Headline Hierarchy for Light Theme */}
-            <div className="space-y-3 sm:space-y-4">
+            {/* Headline Hierarchy */}
+            <div className="space-y-3">
               <div className="text-xs sm:text-sm font-mono tracking-widest text-sky-700 uppercase font-bold flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-sky-600" />
                 Mobile Systems Engineering
@@ -86,7 +86,7 @@ export default function Hero2D() {
               </h1>
 
               {/* Distinctive Narrative Box */}
-              <div className="pt-2">
+              <div className="pt-1">
                 <p className="text-base sm:text-lg lg:text-xl font-normal text-slate-600 leading-relaxed max-w-2xl">
                   Hi, I am <strong className="text-slate-900 font-extrabold">{PERSONAL_INFO.name}</strong>. 
                   Senior Android Developer with <span className="text-indigo-600 font-semibold font-mono">7+ years of experience</span> specializing in 
@@ -111,7 +111,7 @@ export default function Hero2D() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
               <a
                 href="#projects"
                 className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-2xl font-bold bg-gradient-to-r from-sky-600 via-indigo-600 to-pink-600 text-white shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base text-center"
@@ -139,7 +139,7 @@ export default function Hero2D() {
             </div>
 
             {/* Impact Metrics Bar */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 pt-6 border-t border-stone-200/80">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 pt-5 border-t border-stone-200/80">
               {metrics.map((m) => (
                 <div
                   key={m.label}
@@ -157,35 +157,9 @@ export default function Hero2D() {
 
           </div>
 
-          {/* Right Column: 2D Realistic Smartphone Mockup */}
+          {/* Right Column: 3D Perspective Smartphone Mockup */}
           <div className="lg:col-span-5 relative flex items-center justify-center mt-6 lg:mt-0">
-            
-            {/* Floating Animated Badge 1: Top Right */}
-            <div className="absolute -top-4 -right-2 sm:-right-4 z-20 animate-float-slow hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-purple-200 shadow-xl shadow-purple-500/10 backdrop-blur-md">
-              <div className="w-7 h-7 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
-                <Code2 className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-slate-900">Kotlin & Coroutines</div>
-                <div className="text-[10px] text-purple-700 font-mono">Modern Jetpack Flow</div>
-              </div>
-            </div>
-
-            {/* Floating Animated Badge 2: Bottom Left */}
-            <div className="absolute -bottom-4 -left-2 sm:-left-4 z-20 animate-float-rev hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-emerald-200 shadow-xl shadow-emerald-500/10 backdrop-blur-md">
-              <div className="w-7 h-7 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-slate-900">8 Apps Live</div>
-                <div className="text-[10px] text-emerald-700 font-mono">Google Play Verified</div>
-              </div>
-            </div>
-
-            {/* Smartphone Container */}
-            <div className="w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px]">
-              <PhoneMockup2D />
-            </div>
+            <PhoneMockup2D />
           </div>
 
         </div>
