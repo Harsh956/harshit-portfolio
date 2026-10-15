@@ -27,8 +27,7 @@ export default function ExperienceSection() {
             Work <span className="text-gradient-vibrant">Experience</span>
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Over 7 years of progressive engineering leadership architecting Android systems, 
-            driving Play Store launches, and mentoring developer teams.
+            6 years of professional Android application development experience across Kotlin, Java, and Flutter as documented in resume.
           </p>
         </div>
 
@@ -73,7 +72,7 @@ export default function ExperienceSection() {
                       {exp.isCurrent && (
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-mono text-[10px] sm:text-[11px] mb-3 border border-emerald-300 font-bold shadow-xs">
                           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>CURRENT SENIOR ROLE</span>
+                          <span>CURRENT ACTIVE ROLE</span>
                         </div>
                       )}
 

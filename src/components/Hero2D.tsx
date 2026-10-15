@@ -34,11 +34,11 @@ import {
 
 export default function Hero2D() {
   const roles = [
-    'Senior Android Developer',
-    'Kotlin & Java Architect',
+    'Android Developer',
+    'Kotlin & Java Developer',
     '14 Documented CV Projects',
     '8 Verified Google Play Apps',
-    'Flutter Cross-Platform'
+    'Flutter Mobile Development'
   ];
 
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
@@ -52,9 +52,9 @@ export default function Hero2D() {
 
   const metrics = [
     { label: 'CV Projects', value: '14', sub: 'Documented in Resume', color: 'from-sky-600 to-blue-600' },
-    { label: 'Work Experience', value: '7+ Yrs', sub: 'July 2017 – Present', color: 'from-purple-600 to-indigo-600' },
+    { label: 'Work Experience', value: '6 Years', sub: 'Android Development', color: 'from-purple-600 to-indigo-600' },
     { label: 'Live Play Store', value: '8 Apps', sub: 'Active & Verified', color: 'from-emerald-600 to-teal-600' },
-    { label: 'Companies / Roles', value: '6 Roles', sub: 'Enterprise & Solutions', color: 'from-pink-600 to-rose-600' },
+    { label: 'Companies / Roles', value: '6 Roles', sub: 'Professional Career', color: 'from-pink-600 to-rose-600' },
   ];
 
   return (
@@ -87,20 +87,20 @@ export default function Hero2D() {
             <div className="space-y-3">
               <div className="text-xs sm:text-sm font-mono tracking-widest text-sky-700 uppercase font-bold flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-sky-600" />
-                Mobile Systems Engineering
+                Android Mobile Application Development
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
-                Architecting <br className="hidden sm:block" />
-                <span className="text-gradient-vibrant">Mobile Systems</span> <br />
-                at High Scale.
+                Developing <br className="hidden sm:block" />
+                <span className="text-gradient-vibrant">Production Mobile Apps</span> <br />
+                with Kotlin & Java.
               </h1>
 
               {/* Distinctive Narrative Box */}
               <div className="pt-1">
                 <p className="text-base sm:text-lg lg:text-xl font-normal text-slate-600 leading-relaxed max-w-2xl">
                   Hi, I am <strong className="text-slate-900 font-extrabold">{PERSONAL_INFO.name}</strong>. 
-                  Senior Android Developer with <span className="text-indigo-600 font-semibold font-mono">7+ years of experience</span> specializing in 
+                  Android Developer with <span className="text-indigo-600 font-semibold font-mono">6 years of experience</span> specializing in 
                   Kotlin, Core Java, and Flutter. I have developed and delivered <span className="text-emerald-600 font-semibold font-mono">14 production mobile applications</span> across e-commerce, agriculture, healthcare, ticketing, and coaching domains as documented in my professional CV.
                 </p>
               </div>
@@ -181,7 +181,7 @@ export default function Hero2D() {
             href="#projects"
             className="inline-flex flex-col items-center text-xs font-mono text-slate-500 hover:text-indigo-600 transition-colors"
           >
-            <span>SCROLL TO EXPLORE ARCHITECTURE</span>
+            <span>SCROLL TO EXPLORE 14 CV PROJECTS</span>
             <ChevronDown className="w-4 h-4 mt-1.5 animate-bounce text-indigo-600" />
           </a>
         </div>

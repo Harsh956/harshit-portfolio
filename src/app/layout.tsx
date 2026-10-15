@@ -2,15 +2,17 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Harshit Saxena | Senior Android & Mobile Architect | Portfolio',
-  description: 'Portfolio of Harshit Saxena. Senior Android Developer specializing in Kotlin, Modern Jetpack, Coroutines, and Flutter with 14+ published Google Play Store applications.',
+  title: 'Harshit Saxena | Android Developer | Portfolio',
+  description: 'Portfolio of Harshit Saxena, Android Developer with 6 years of experience specializing in Kotlin, Core Java, Android SDK, and Flutter with 14 production mobile applications.',
   keywords: [
     'Harshit Saxena',
     'Android Developer',
-    'Senior Android Developer',
-    'Flutter Developer',
     'Kotlin',
-    'Jetpack Compose',
+    'Core Java',
+    'Flutter Developer',
+    'Android SDK',
+    'Retrofit',
+    'Firebase',
     'Mobile Application Developer',
     'Portfolio',
     'Google Play Store Apps'
@@ -21,14 +23,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://harshit-portfolio-3d-three.vercel.app',
-    title: 'Harshit Saxena | Senior Android & Mobile Architect',
-    description: 'Explore 14+ Google Play Store apps, interactive mobile simulators, tech skills, and mobile architecture.',
+    title: 'Harshit Saxena | Android Developer',
+    description: 'Explore 14 professional CV projects, verified Google Play Store apps, interactive mobile simulator, and technical skills.',
     siteName: 'Harshit Saxena Portfolio'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Harshit Saxena | Senior Android Developer',
-    description: 'Explore 14+ production Android apps and interactive mobile portfolio.'
+    title: 'Harshit Saxena | Android Developer',
+    description: 'Explore 14 production mobile apps and interactive portfolio.'
   }
 };
 

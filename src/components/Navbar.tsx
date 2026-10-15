@@ -48,7 +48,7 @@ export default function Navbar() {
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
             <div className="text-[11px] text-indigo-600 font-mono font-bold hidden sm:block">
-              Senior Android Architect
+              Android Developer • Kotlin & Java
             </div>
           </div>
         </a>

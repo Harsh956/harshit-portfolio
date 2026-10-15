@@ -1,17 +1,11 @@
 'use client';
 
 import React from 'react';
-import { EDUCATION_LIST, CERTIFICATIONS } from '@/data/portfolioData';
+import { EDUCATION_LIST, CERTIFICATIONS, PERSONAL_STRENGTHS } from '@/data/portfolioData';
 import { GraduationCap, Award, CheckCircle, Sparkles } from 'lucide-react';
 
 export default function EducationSection() {
-  const strengths = [
-    'Quick learner with rapid adaptability to emergent mobile frameworks (Jetpack Compose, Flutter)',
-    'High-reliability code discipline: achieving 99.9% crash-free sessions across 14 apps',
-    'Full lifecycle ownership: from architectural whiteboarding to Google Play release & monitoring',
-    'Effective cross-functional communication with backend engineers, designers, and stakeholders',
-    'Strong foundation in Object-Oriented Programming (OOP), Data Structures, and Clean Architecture',
-  ];
+  const strengths = PERSONAL_STRENGTHS;
 
   return (
     <section className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">

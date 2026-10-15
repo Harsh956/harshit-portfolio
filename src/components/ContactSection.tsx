@@ -172,7 +172,7 @@ export default function ContactSection() {
             <div className="p-3.5 rounded-2xl bg-white border border-stone-200 flex items-center gap-2.5 shadow-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <div className="text-xs text-slate-700 font-mono">
-                Open to Full-Time Senior Roles & Immediate Joining
+                Open to Full-Time Android Developer Roles & Immediate Joining
               </div>
             </div>
 
@@ -249,7 +249,7 @@ export default function ContactSection() {
                     <label className="text-xs font-mono text-slate-700 block font-semibold">Subject</label>
                     <input
                       type="text"
-                      placeholder="e.g. Android Lead Role / App Architecture Consultation"
+                      placeholder="e.g. Android Developer Opportunity / Project Discussion"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 border border-stone-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-100 transition"

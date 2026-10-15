@@ -46,7 +46,7 @@ export const PERSONAL_INFO = {
   email: "saxenah003@gmail.com",
   location: "34, Sector 4, Greater Noida, India",
   currentRole: "Android Developer at Ogrelogic Solutions Pvt. Ltd., Noida (October 2021 – Present)",
-  experienceYears: "7+ Years",
+  experienceYears: "6 Years",
   projectsCount: "14 Projects",
   certificationsCount: "2 Certifications",
   social: {
