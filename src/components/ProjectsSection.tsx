@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PROJECTS, Project } from '@/data/portfolioData';
+import appScreenshotsData from '@/data/appScreenshots.json';
 import {
   ExternalLink,
   Users,
@@ -11,6 +12,7 @@ import {
   X,
   Layers,
   ChevronRight,
+  ChevronLeft,
   ShieldCheck,
   ArrowUpRight,
   FolderGit2,
@@ -23,8 +25,14 @@ export default function ProjectsSection() {
   const [filter, setFilter] = useState<'All' | 'Live' | 'Android' | 'Flutter'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [fullscreenScreenshot, setFullscreenScreenshot] = useState<{
-    url: string;
+  
+  // Card-level screenshot slide tracking
+  const [cardSlideIndices, setCardSlideIndices] = useState<Record<string, number>>({});
+
+  // Fullscreen Lightbox gallery state
+  const [fullscreenGallery, setFullscreenGallery] = useState<{
+    screenshots: string[];
+    currentIndex: number;
     title: string;
     playStoreUrl?: string;
   } | null>(null);
@@ -33,10 +41,38 @@ export default function ProjectsSection() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedProject(null);
-        setFullscreenScreenshot(null);
+        setFullscreenGallery(null);
+      }
+      if (fullscreenGallery) {
+        if (e.key === 'ArrowLeft') {
+          setFullscreenGallery((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  currentIndex:
+                    prev.currentIndex === 0
+                      ? prev.screenshots.length - 1
+                      : prev.currentIndex - 1,
+                }
+              : null
+          );
+        }
+        if (e.key === 'ArrowRight') {
+          setFullscreenGallery((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  currentIndex:
+                    prev.currentIndex === prev.screenshots.length - 1
+                      ? 0
+                      : prev.currentIndex + 1,
+                }
+              : null
+          );
+        }
       }
     };
-    if (selectedProject || fullscreenScreenshot) {
+    if (selectedProject || fullscreenGallery) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
@@ -44,7 +80,7 @@ export default function ProjectsSection() {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [selectedProject, fullscreenScreenshot]);
+  }, [selectedProject, fullscreenGallery]);
 
   const filteredProjects = PROJECTS.filter((p) => {
     const matchesFilter =
@@ -65,6 +101,28 @@ export default function ProjectsSection() {
     return matchesFilter && matchesSearch;
   });
 
+  const getProjectScreenshots = (project: Project): string[] => {
+    const fromManifest = (appScreenshotsData as Record<string, string[]>)[project.id];
+    if (fromManifest && fromManifest.length > 0) return fromManifest;
+    return project.screenshotUrl ? [project.screenshotUrl] : [];
+  };
+
+  const handleCardPrev = (projectId: string, total: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCardSlideIndices((prev) => {
+      const cur = prev[projectId] || 0;
+      return { ...prev, [projectId]: cur === 0 ? total - 1 : cur - 1 };
+    });
+  };
+
+  const handleCardNext = (projectId: string, total: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCardSlideIndices((prev) => {
+      const cur = prev[projectId] || 0;
+      return { ...prev, [projectId]: cur === total - 1 ? 0 : cur + 1 };
+    });
+  };
+
   return (
     <section id="projects" className="py-10 sm:py-14 lg:py-16 relative colored-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -81,7 +139,7 @@ export default function ProjectsSection() {
               <span className="text-gradient-vibrant">Projects</span>
             </h2>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-              All 14 projects directly from Harshit Saxena's CV. Live Play Store apps feature authentic full-length store screenshots. Completed projects without active store listings have external links cleanly omitted.
+              All 14 projects directly from Harshit Saxena's CV. Live Play Store apps feature authentic full-length store screenshots with interactive slide carousels.
             </p>
           </div>
 
@@ -91,7 +149,7 @@ export default function ProjectsSection() {
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               <div className="text-left font-mono">
                 <div className="text-xs font-bold text-emerald-900">8 Live on Play Store</div>
-                <div className="text-[10px] text-emerald-700">Full Screenshots Attached</div>
+                <div className="text-[10px] text-emerald-700">Multi-Screenshot Slides</div>
               </div>
             </div>
             <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white border border-stone-200 shadow-xs">
@@ -144,147 +202,196 @@ export default function ProjectsSection() {
 
         {/* Projects Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-          {filteredProjects.map((project) => (
-            <div
-              key={project.id}
-              className="luxury-card rounded-3xl p-5 sm:p-6 border border-stone-200/90 flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-md"
-            >
-              {/* Colorful Top Accent Stripe */}
+          {filteredProjects.map((project) => {
+            const screenshots = getProjectScreenshots(project);
+            const activeIndex = cardSlideIndices[project.id] || 0;
+            const currentImg = screenshots[activeIndex] || project.screenshotUrl;
+
+            return (
               <div
-                className="h-1.5 w-full absolute top-0 left-0 transition-all duration-300 group-hover:h-2"
-                style={{ backgroundColor: project.accentColor }}
-              />
+                key={project.id}
+                className="luxury-card rounded-3xl p-5 sm:p-6 border border-stone-200/90 flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-md"
+              >
+                {/* Colorful Top Accent Stripe */}
+                <div
+                  className="h-1.5 w-full absolute top-0 left-0 transition-all duration-300 group-hover:h-2"
+                  style={{ backgroundColor: project.accentColor }}
+                />
 
-              <div className="space-y-4 pt-1">
-                
-                {/* Full Uncropped Play Store Screenshot Container */}
-                {project.isLiveOnPlayStore && project.screenshotUrl ? (
-                  <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden border border-stone-200/90 bg-gradient-to-b from-stone-50 via-stone-100 to-stone-200/60 p-2.5 flex items-center justify-center group/screen transition-all">
-                    
-                    {/* Uncropped Mobile Screenshot */}
-                    <img
-                      src={project.screenshotUrl}
-                      alt={`${project.title} Google Play Screenshot`}
-                      className="h-full w-auto max-w-full object-contain rounded-xl shadow-md transition-transform duration-300 group-hover/screen:scale-105 cursor-pointer"
-                      loading="lazy"
-                      onClick={() =>
-                        setFullscreenScreenshot({
-                          url: project.screenshotUrl!,
-                          title: project.title,
-                          playStoreUrl: project.playStoreUrl,
-                        })
-                      }
-                    />
+                <div className="space-y-4 pt-1">
+                  
+                  {/* Full Uncropped Play Store Screenshot Container with Slide Controls */}
+                  {project.isLiveOnPlayStore && currentImg ? (
+                    <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden border border-stone-200/90 bg-gradient-to-b from-stone-50 via-stone-100 to-stone-200/60 p-2.5 flex items-center justify-center group/screen transition-all">
+                      
+                      {/* Uncropped Mobile Screenshot */}
+                      <img
+                        key={`${project.id}-${activeIndex}`}
+                        src={currentImg}
+                        alt={`${project.title} Google Play Screenshot ${activeIndex + 1}`}
+                        className="h-full w-auto max-w-full object-contain rounded-xl shadow-md transition-transform duration-300 group-hover/screen:scale-105 cursor-pointer"
+                        loading="lazy"
+                        onClick={() =>
+                          setFullscreenGallery({
+                            screenshots,
+                            currentIndex: activeIndex,
+                            title: project.title,
+                            playStoreUrl: project.playStoreUrl,
+                          })
+                        }
+                      />
 
-                    {/* Google Play Store Badge */}
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-emerald-300 text-[10px] font-mono text-emerald-800 font-bold flex items-center gap-1 shadow-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Play Store App
+                      {/* Google Play Store Badge with Slide Counter */}
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-emerald-300 text-[10px] font-mono text-emerald-800 font-bold flex items-center gap-1 shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>
+                          {screenshots.length > 1
+                            ? `Slide ${activeIndex + 1}/${screenshots.length}`
+                            : 'Play Store App'}
+                        </span>
+                      </div>
+
+                      {/* Card Left / Right Slide Navigation Buttons (if multiple screenshots) */}
+                      {screenshots.length > 1 && (
+                        <>
+                          <button
+                            onClick={(e) => handleCardPrev(project.id, screenshots.length, e)}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-stone-200 text-slate-700 hover:text-indigo-600 hover:bg-white shadow-md transition opacity-80 sm:opacity-0 sm:group-hover/screen:opacity-100"
+                            aria-label="Previous Screenshot"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={(e) => handleCardNext(project.id, screenshots.length, e)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-stone-200 text-slate-700 hover:text-indigo-600 hover:bg-white shadow-md transition opacity-80 sm:opacity-0 sm:group-hover/screen:opacity-100"
+                            aria-label="Next Screenshot"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </>
+                      )}
+
+                      {/* Zoom / Full View Button */}
+                      <button
+                        onClick={() =>
+                          setFullscreenGallery({
+                            screenshots,
+                            currentIndex: activeIndex,
+                            title: project.title,
+                            playStoreUrl: project.playStoreUrl,
+                          })
+                        }
+                        className="absolute bottom-3 right-3 p-2 rounded-xl bg-white/95 backdrop-blur-sm border border-stone-200 text-slate-700 hover:text-indigo-600 hover:bg-white shadow-md transition opacity-90 sm:opacity-0 sm:group-hover/screen:opacity-100"
+                        title="View Full Resolution Gallery"
+                      >
+                        <Maximize2 className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Slide Indicator Dots on Card */}
+                      {screenshots.length > 1 && (
+                        <div className="absolute bottom-2 inset-x-0 flex justify-center gap-1 pointer-events-none">
+                          {screenshots.map((_, dotIdx) => (
+                            <span
+                              key={dotIdx}
+                              className={`h-1 rounded-full transition-all ${
+                                dotIdx === activeIndex
+                                  ? 'w-3.5 bg-indigo-600'
+                                  : 'w-1 bg-slate-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
+                  ) : (
+                    <div className="w-full h-24 rounded-2xl border border-stone-200 bg-stone-50 p-4 flex flex-col justify-center text-left">
+                      <span className="text-[10px] font-mono text-slate-500 uppercase font-bold flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
+                        Production Project from CV
+                      </span>
+                      <span className="text-xs text-slate-700 font-semibold mt-0.5">
+                        Client / Enterprise Delivered Application
+                      </span>
+                    </div>
+                  )}
 
-                    {/* Zoom / Full View Button on Hover */}
-                    <button
-                      onClick={() =>
-                        setFullscreenScreenshot({
-                          url: project.screenshotUrl!,
-                          title: project.title,
-                          playStoreUrl: project.playStoreUrl,
-                        })
-                      }
-                      className="absolute bottom-3 right-3 p-2 rounded-xl bg-white/95 backdrop-blur-sm border border-stone-200 text-slate-700 hover:text-indigo-600 hover:bg-white shadow-md transition opacity-90 sm:opacity-0 sm:group-hover/screen:opacity-100"
-                      title="View Full Screenshot"
-                    >
-                      <Maximize2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="w-full h-24 rounded-2xl border border-stone-200 bg-stone-50 p-4 flex flex-col justify-center">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase font-bold flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-                      Production Project from CV
-                    </span>
-                    <span className="text-xs text-slate-700 font-semibold mt-0.5">
-                      Client / Enterprise Delivered Application
-                    </span>
-                  </div>
-                )}
-
-                {/* Header Row: Category Badge & Status */}
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase tracking-wider"
-                    style={{
-                      backgroundColor: `${project.accentColor}15`,
-                      color: project.accentColor,
-                      border: `1px solid ${project.accentColor}40`,
-                    }}
-                  >
-                    {project.category}
-                  </span>
-
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600 font-mono">
-                    <Users className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Team: {project.teamSize}</span>
-                  </div>
-                </div>
-
-                {/* Title & Tagline from CV */}
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-indigo-600 font-semibold mt-1 leading-snug">
-                    {project.tagline}
-                  </p>
-                </div>
-
-                {/* Description from CV */}
-                <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* Tech Stack Chips from CV */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {project.techStack.map((tech) => (
+                  {/* Header Row: Category Badge & Status */}
+                  <div className="flex items-center justify-between">
                     <span
-                      key={tech}
-                      className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700"
+                      className="text-[11px] font-mono font-bold px-3 py-1 rounded-full uppercase tracking-wider"
+                      style={{
+                        backgroundColor: `${project.accentColor}15`,
+                        color: project.accentColor,
+                        border: `1px solid ${project.accentColor}40`,
+                      }}
                     >
-                      {tech}
+                      {project.category}
                     </span>
-                  ))}
+
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-mono">
+                      <Users className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Team: {project.teamSize}</span>
+                    </div>
+                  </div>
+
+                  {/* Title & Tagline from CV */}
+                  <div className="text-left">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-indigo-600 font-semibold mt-1 leading-snug">
+                      {project.tagline}
+                    </p>
+                  </div>
+
+                  {/* Description from CV */}
+                  <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed text-left">
+                    {project.description}
+                  </p>
+
+                  {/* Tech Stack Chips from CV */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Card Footer: Conditional Linking */}
+                <div className="pt-4 mt-4 border-t border-stone-200 flex items-center justify-between gap-3">
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/btn transition"
+                  >
+                    <span>CV Details</span>
+                    <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+
+                  {/* Only render Play Store button if isLiveOnPlayStore is true */}
+                  {project.isLiveOnPlayStore && project.playStoreUrl ? (
+                    <a
+                      href={project.playStoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-600 hover:text-white transition-all shadow-xs shrink-0"
+                    >
+                      <span>Play Store</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <span className="text-[10px] font-mono font-bold text-slate-500 px-2.5 py-1 rounded-lg bg-stone-100 border border-stone-200">
+                      Completed Project
+                    </span>
+                  )}
                 </div>
               </div>
-
-              {/* Card Footer: Conditional Linking */}
-              <div className="pt-4 mt-4 border-t border-stone-200 flex items-center justify-between gap-3">
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/btn transition"
-                >
-                  <span>CV Details</span>
-                  <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-
-                {/* Only render Play Store button if isLiveOnPlayStore is true */}
-                {project.isLiveOnPlayStore && project.playStoreUrl ? (
-                  <a
-                    href={project.playStoreUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-600 hover:text-white transition-all shadow-xs shrink-0"
-                  >
-                    <span>Play Store</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
-                ) : (
-                  <span className="text-[10px] font-mono font-bold text-slate-500 px-2.5 py-1 rounded-lg bg-stone-100 border border-stone-200">
-                    Completed Project
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Modal for Details from CV */}
@@ -341,20 +448,26 @@ export default function ProjectsSection() {
               </div>
 
               {/* Full Uncropped Screenshot in Modal */}
-              {selectedProject.isLiveOnPlayStore && selectedProject.screenshotUrl && (
+              {selectedProject.isLiveOnPlayStore && (
                 <div className="mb-6 rounded-2xl overflow-hidden border border-stone-200 bg-gradient-to-b from-stone-50 to-stone-100 p-3 flex items-center justify-center max-h-[480px]">
-                  <img
-                    src={selectedProject.screenshotUrl}
-                    alt={`${selectedProject.title} screenshot`}
-                    className="max-h-[440px] w-auto object-contain rounded-xl shadow-lg cursor-pointer"
-                    onClick={() =>
-                      setFullscreenScreenshot({
-                        url: selectedProject.screenshotUrl!,
-                        title: selectedProject.title,
-                        playStoreUrl: selectedProject.playStoreUrl,
-                      })
-                    }
-                  />
+                  {(() => {
+                    const modalScreenshots = getProjectScreenshots(selectedProject);
+                    return (
+                      <img
+                        src={modalScreenshots[0] || selectedProject.screenshotUrl}
+                        alt={`${selectedProject.title} screenshot`}
+                        className="max-h-[440px] w-auto object-contain rounded-xl shadow-lg cursor-pointer"
+                        onClick={() =>
+                          setFullscreenGallery({
+                            screenshots: modalScreenshots,
+                            currentIndex: 0,
+                            title: selectedProject.title,
+                            playStoreUrl: selectedProject.playStoreUrl,
+                          })
+                        }
+                      />
+                    );
+                  })()}
                 </div>
               )}
 
@@ -430,18 +543,18 @@ export default function ProjectsSection() {
           </div>
         )}
 
-        {/* Dedicated Fullscreen Screenshot Lightbox */}
-        {fullscreenScreenshot && (
+        {/* Dedicated Fullscreen Screenshot Lightbox with Carousel Controls */}
+        {fullscreenGallery && (
           <div
-            onClick={() => setFullscreenScreenshot(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+            onClick={() => setFullscreenGallery(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in"
           >
             <div
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-xl w-full bg-white rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col items-center max-h-[92vh]"
             >
               <button
-                onClick={() => setFullscreenScreenshot(null)}
+                onClick={() => setFullscreenGallery(null)}
                 className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
               >
                 <X className="w-5 h-5" />
@@ -449,26 +562,93 @@ export default function ProjectsSection() {
 
               <div className="text-center mb-3">
                 <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                  {fullscreenScreenshot.title}
+                  {fullscreenGallery.title}
                 </h3>
-                <p className="text-xs text-emerald-700 font-mono font-semibold">
-                  Google Play Store App Full Screenshot
+                <p className="text-xs text-indigo-700 font-mono font-semibold">
+                  Google Play Store Screenshot {fullscreenGallery.currentIndex + 1} of{' '}
+                  {fullscreenGallery.screenshots.length}
                 </p>
               </div>
 
-              {/* High-Resolution Uncropped Full Mobile View */}
-              <div className="w-full flex items-center justify-center overflow-auto max-h-[72vh] p-2 bg-stone-50 rounded-2xl border border-stone-200">
+              {/* High-Resolution Uncropped Full Mobile View with Prev/Next */}
+              <div className="w-full relative flex items-center justify-center overflow-auto max-h-[68vh] p-2 bg-stone-50 rounded-2xl border border-stone-200">
                 <img
-                  src={fullscreenScreenshot.url}
-                  alt={`${fullscreenScreenshot.title} Full View`}
-                  className="max-h-[68vh] w-auto object-contain rounded-xl shadow-lg"
+                  src={fullscreenGallery.screenshots[fullscreenGallery.currentIndex]}
+                  alt={`${fullscreenGallery.title} Full View`}
+                  className="max-h-[64vh] w-auto object-contain rounded-xl shadow-lg"
                 />
+
+                {fullscreenGallery.screenshots.length > 1 && (
+                  <>
+                    <button
+                      onClick={() =>
+                        setFullscreenGallery((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                currentIndex:
+                                  prev.currentIndex === 0
+                                    ? prev.screenshots.length - 1
+                                    : prev.currentIndex - 1,
+                              }
+                            : null
+                        )
+                      }
+                      className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 border border-stone-300 text-slate-800 shadow-md hover:bg-white"
+                      aria-label="Previous Screenshot"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setFullscreenGallery((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                currentIndex:
+                                  prev.currentIndex === prev.screenshots.length - 1
+                                    ? 0
+                                    : prev.currentIndex + 1,
+                              }
+                            : null
+                        )
+                      }
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 border border-stone-300 text-slate-800 shadow-md hover:bg-white"
+                      aria-label="Next Screenshot"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </>
+                )}
               </div>
 
-              {fullscreenScreenshot.playStoreUrl && (
+              {/* Thumbnail strip in lightbox */}
+              {fullscreenGallery.screenshots.length > 1 && (
+                <div className="flex gap-2 mt-3 overflow-x-auto p-1 max-w-full">
+                  {fullscreenGallery.screenshots.map((thumb, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() =>
+                        setFullscreenGallery((prev) =>
+                          prev ? { ...prev, currentIndex: idx } : null
+                        )
+                      }
+                      className={`w-10 h-14 rounded-lg overflow-hidden border-2 shrink-0 ${
+                        idx === fullscreenGallery.currentIndex
+                          ? 'border-indigo-600 ring-2 ring-indigo-200 scale-105'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={thumb} alt="thumb" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {fullscreenGallery.playStoreUrl && (
                 <div className="mt-3.5 w-full flex justify-end">
                   <a
-                    href={fullscreenScreenshot.playStoreUrl}
+                    href={fullscreenGallery.playStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm"
