@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://harshit-saxena.vercel.app',
+    url: 'https://harshit-portfolio-3d-three.vercel.app',
     title: 'Harshit Saxena | Senior Android & Mobile Architect',
     description: 'Explore 14+ Google Play Store apps, interactive mobile simulators, tech skills, and mobile architecture.',
     siteName: 'Harshit Saxena Portfolio'

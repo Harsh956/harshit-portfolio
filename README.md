@@ -1,25 +1,56 @@
-# 🚀 Harshit Saxena - Executive Mobile Developer Portfolio (2D)
+# 🚀 Harshit Saxena - Senior Android Developer Portfolio
 
-A blazing-fast, ultra-clean executive mobile developer portfolio for **Harshit Saxena**, Senior Android & Mobile Architect with 7+ years of experience and 14+ published Google Play Store applications.
-
-Built with **Next.js 14**, **Tailwind CSS**, and **TypeScript**. Optimized for 100/100 Lighthouse performance and zero-configuration **Vercel** deployment.
+[![Live Production Website](https://img.shields.io/badge/Live_Website-harshit--portfolio--3d--three.vercel.app-00f0ff?style=for-the-badge&logo=vercel)](https://harshit-portfolio-3d-three.vercel.app)
+[![Google Play](https://img.shields.io/badge/Google_Play-8_Live_Apps-10b981?style=for-the-badge&logo=google-play)](https://harshit-portfolio-3d-three.vercel.app#projects)
+[![Experience](https://img.shields.io/badge/Experience-7+_Years-8b5cf6?style=for-the-badge)](https://harshit-portfolio-3d-three.vercel.app#experience)
+[![Deployment Status](https://img.shields.io/badge/Vercel_Status-Production_Live-brightgreen?style=for-the-badge&logo=vercel)](https://harshit-portfolio-3d-three.vercel.app)
 
 ---
 
-## ✨ Highlights
+## 🌐 Live Production URL (Vercel)
 
-- ⚡ **Blazing Fast & Ultra-Clean (Pure 2D)**: Sub-200ms load time with zero WebGL/3D lag, perfect typography, and silky smooth 60 FPS transitions.
-- 📱 **Pixel-Perfect 2D Smartphone Mockup**: High-fidelity vector smartphone display showing active architecture snippets (Kotlin Coroutines & Flow) and real-time app telemetry.
+Click the link below to view the live deployed portfolio:
+
+👉 **[https://harshit-portfolio-3d-three.vercel.app](https://harshit-portfolio-3d-three.vercel.app)** 👈
+
+- **Hosted On**: [Vercel](https://vercel.com/saxenah003-4074/harshit-portfolio-3d)
+- **Production Status**: 🟢 Active & Deployed Worldwide
+- **Global CDN**: Edge Network with Sub-200ms TTFB
+
+---
+
+## 📱 About The Portfolio
+
+A high-precision mobile engineering portfolio for **Harshit Saxena**, Senior Android & Mobile Application Developer with **7+ years** of industry experience, **14 documented CV projects**, and **8 live Google Play Store applications**.
+
+Built with **Next.js 14**, **Tailwind CSS**, and **TypeScript**. Fully deployed and hosted on **Vercel**.
+
+---
+
+## ✨ Features & Highlights
+
+- ⚡ **Ultra-Clean Pure 2D Architecture**: Sub-200ms load time with zero WebGL/3D lag, smooth 60 FPS CSS transitions, and obsidian dark glassmorphism.
+- 📱 **Pixel-Perfect 2D Smartphone Mockup**: High-fidelity vector smartphone display showing active architecture snippets (Kotlin Coroutines, StateFlow, Clean Architecture) and real-time app telemetry.
 - 🎮 **Interactive Mobile Device Lab**: Test 5 real production app flows directly on screen:
   - **Rapagra**: Smart Agriculture IoT & AI leaf scanner
   - **Immortal Seats**: Real-time 360° seat booking & checkout
   - **Step App**: Activity pedometer & cancer charity donation
   - **Starting 5**: Flutter basketball training video player
   - **MeetGoals**: Pomodoro timer & habit streak counter
-- 🌟 **All 14 Google Play Store Apps**: Direct links to all 14 published Android/Flutter apps with category filters, search bar, and architectural deep-dive modals.
-- 💼 **Professional Experience**: 7+ years covering Ogrelogic Solutions, Triologic Enterprise Solutions, Logic Brains, Fugenx Technologies, Brainwork Technologies, and Javatpoint.
-- 🎓 **Education & Certifications**: B.Tech (ECE) Dr. A.P.J. Abdul Kalam Technical University, Diploma (ECE) BTEUP, Cyber Security & Core Java Certifications.
-- 📬 **Direct Contact Channel**: Secure contact form with silent inbox delivery, phone/email copy buttons, and location in Greater Noida, India.
+- 🌟 **Google Play Store Showcase**: Real in-app screenshots extracted from Google Play, category filters, search bar, and architectural deep-dive modals.
+- 💼 **Professional Experience (7+ Years)**:
+  - **Senior Android Developer** – Ogrelogic Solutions (Dec 2022 – Present)
+  - **Senior Software Engineer** – Triologic Enterprise Solutions (Jul 2021 – Dec 2022)
+  - **Senior Software Engineer** – Logic Brains (Feb 2021 – Jul 2021)
+  - **Software Engineer** – Fugenx Technologies (Nov 2018 – Feb 2021)
+  - **Junior Software Engineer** – Brainwork Technologies (Jul 2017 – Nov 2018)
+  - **Android Developer Trainee** – Javatpoint (Jan 2017 – Jun 2017)
+- 🎓 **Education & Certifications**:
+  - **B.Tech (ECE)** – Dr. A.P.J. Abdul Kalam Technical University (2014 – 2017)
+  - **Diploma (ECE)** – Board of Technical Education Uttar Pradesh (2011 – 2014)
+  - **Cyber Security Certification** – Craw Cyber Security
+  - **Core Java Certification** – DUCAT
+- 📬 **Direct Contact Channel**: Contact form with silent inbox delivery to `saxenah003@gmail.com`, phone/email copy buttons, and location in Greater Noida, India.
 
 ---
 
@@ -29,69 +60,24 @@ Built with **Next.js 14**, **Tailwind CSS**, and **TypeScript**. Optimized for 1
 - **Styling**: Tailwind CSS with Glassmorphism & Obsidian Dark Theme
 - **Language**: TypeScript
 - **Icons**: Lucide React
-- **Hosting Target**: Vercel
+- **Hosting & CI/CD**: Vercel
 
 ---
 
-## 💻 Quick Start (Local Development)
+## 🚀 Live Links & Resources
 
-### 1. Open in VS Code
-```bash
-code D:\harshit-portfolio-3d
-```
-*(Or double-click `open-in-vscode.bat` in Windows Explorer)*
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Start Local Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+- 🌐 **Live Portfolio**: [https://harshit-portfolio-3d-three.vercel.app](https://harshit-portfolio-3d-three.vercel.app)
+- 📦 **GitHub Repository**: [https://github.com/Harsh956/harshit-portfolio](https://github.com/Harsh956/harshit-portfolio)
+- ☁️ **Vercel Project Dashboard**: [https://vercel.com/saxenah003-4074/harshit-portfolio-3d](https://vercel.com/saxenah003-4074/harshit-portfolio-3d)
+- 🏬 **Google Play Developer**: [Ogrelogic Solutions Apps](https://play.google.com/store/apps/developer?id=Ogrelogic+Solutions)
 
 ---
 
-## 🚀 How to Deploy to Vercel (2 Easy Methods)
-
-### Method 1: Deploy via GitHub (Recommended & Automatic)
-
-1. In VS Code or terminal inside `D:\harshit-portfolio-3d`:
-   ```bash
-   git init
-   git add .
-   git commit -m "Harshit Saxena 2D Executive Portfolio"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/harshit-saxena-portfolio.git
-   git push -u origin main
-   ```
-2. Go to [vercel.com](https://vercel.com) and log in.
-3. Click **"Add New..."** -> **"Project"**.
-4. Import your GitHub repository.
-5. Click **"Deploy"**!
-
----
-
-### Method 2: Deploy directly via Vercel CLI (1-Command Deploy)
-
-In your terminal inside `D:\harshit-portfolio-3d`:
-```bash
-npx vercel
-```
-For production release:
-```bash
-npx vercel --prod
-```
-
----
-
-## 👤 Author
+## 👤 Author Contact
 
 **Harshit Saxena**
 - **Title**: Senior Android & Mobile Application Developer
 - **Phone**: +91-9634081401
-- **Email**: saxenah003@gmail.com
+- **Email**: [saxenah003@gmail.com](mailto:saxenah003@gmail.com)
 - **Location**: 34, Sector 4, Greater Noida, India
-- **Play Store**: [Developer Catalog](https://play.google.com/store/apps/developer?id=Ogrelogic+Solutions)
+- **Portfolio**: [https://harshit-portfolio-3d-three.vercel.app](https://harshit-portfolio-3d-three.vercel.app)

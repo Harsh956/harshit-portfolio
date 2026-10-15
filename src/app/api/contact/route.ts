@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Referer': 'https://harshit-portfolio.vercel.app'
+          'Referer': 'https://harshit-portfolio-3d-three.vercel.app'
         },
         body: JSON.stringify({
           name,
